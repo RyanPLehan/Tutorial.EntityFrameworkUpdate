@@ -16,8 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Domain\" />
-    <Folder Include="Infrastructure\" />
+    <Folder Include="Domain\Inventory\Categories\" />
+    <Folder Include="Domain\Inventory\ProductTags\" />
+    <Folder Include="Domain\Inventory\Products\" />
+    <Folder Include="Infrastructure\Resources\" />
   </ItemGroup>
 
 </Project>
