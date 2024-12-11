@@ -41,10 +41,18 @@ internal class ReadOnlyContextFactory : IContextFactory<ReadOnlyContext>
         var optionsBuilder = new DbContextOptionsBuilder<ReadOnlyContext>()
                                         .UseLoggerFactory(_loggerFactory)
                                         .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
-                                        .UseSqlite(BuildConnectionString(_options.ReadOnly), AddDatabaseOptions)
+                                        .UseSqlite(BuildConnectionString(_options.InventoryRO, SqliteOpenMode.Memory), AddDatabaseOptions)      // In Memory
+                                        //.UseSqlite(BuildConnectionString(BuildDataSource(_options.InventoryRO), SqliteOpenMode.ReadOnly), AddDatabaseOptions)   // On Disk
                                         .EnableSensitiveDataLogging();
 
         return new ReadOnlyContext(optionsBuilder.Options);
+    }
+
+
+    private static string BuildDataSource(string databaseName)
+    {
+        var dbFileName = String.Format("{0}.db3", databaseName);
+        return Path.Combine(Path.GetTempPath(), dbFileName);
     }
 
     /// <summary>
@@ -55,11 +63,11 @@ internal class ReadOnlyContextFactory : IContextFactory<ReadOnlyContext>
     /// See: https://learn.microsoft.com/en-us/dotnet/standard/data/sqlite/connection-strings
     /// See: https://www.sqlite.org/wal.html
     /// </remarks>
-    private string BuildConnectionString(string dataSource)
+    private static string BuildConnectionString(string dataSource, SqliteOpenMode mode = SqliteOpenMode.Memory)
     {
         return new SqliteConnectionStringBuilder()
         {
-            Mode = SqliteOpenMode.Memory,
+            Mode = mode,
             DataSource = dataSource,
             Pooling = true,
             DefaultTimeout = 30,

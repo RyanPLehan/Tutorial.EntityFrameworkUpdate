@@ -40,5 +40,42 @@ public class CategoriesController : ControllerBase
             return NoContent();
         else
             return Ok(response);
-    }   
+    }
+
+    [HttpGet]
+    [Route("{id:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    //[Authorize(Roles = AuthorizationRoles.Read + ", " + AuthorizationRoles.Write)]
+    public async Task<ActionResult<Category>> Get([FromRoute] int id)
+    {
+        if (id <= 0)
+            return BadRequest();
+
+        var request = new GetRequest() { Id = id };
+        var response = await _mediator.Send(request);
+
+        if (response == null)
+            return NotFound();
+        else
+            return Ok(response);
+    }
+
+
+    [HttpGet]
+    [Route("{id:int}/Products")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    //[Authorize(Roles = AuthorizationRoles.Read + ", " + AuthorizationRoles.Write)]
+    public async Task<ActionResult<ImmutableArray<Category>>> GetProducts([FromRoute] int id)
+    {
+        var request = new GetAllRequest();
+        var response = await _mediator.Send(request);
+
+        if (response == null || response.IsEmpty)
+            return NoContent();
+        else
+            return Ok(response);
+    }
 }
