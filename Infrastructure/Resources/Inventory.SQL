@@ -1,25 +1,25 @@
 CREATE TABLE Categories
 (      
-    CategoryID INTEGER PRIMARY KEY AUTOINCREMENT,
-    CategoryName TEXT,
-    Description TEXT
+    CategoryID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    CategoryName TEXT NOT NULL,
+    Description TEXT NOT NULL
 );
 
 CREATE TABLE Products(
-    ProductID INTEGER PRIMARY KEY AUTOINCREMENT,
-    ProductName TEXT,
-    Description TEXT,
-    Price NUMERIC DEFAULT 0,
-	Quantity INTEGER DEFAULT 0,
-    CategoryID INTEGER,
+    ProductID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    ProductName TEXT NOT NULL,
+    Description TEXT NOT NULL,
+    Price NUMERIC  NOT NULL DEFAULT 0,
+	Quantity INTEGER  NOT NULL DEFAULT 0,
+    CategoryID INTEGER NOT NULL,
 	FOREIGN KEY (CategoryID) REFERENCES Categories (CategoryID)
 );
 
 CREATE TABLE ProductTags(
-    ProductTagID INTEGER PRIMARY KEY AUTOINCREMENT,
-    TagName TEXT,
-	TagValue TEXT,
-    ProductID INTEGER,
+    ProductTagID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    TagName TEXT NOT NULL,
+	TagValue TEXT NULL,
+    ProductID INTEGER NOT NULL,
 	FOREIGN KEY (ProductID) REFERENCES Products (ProductID)
 );
 
@@ -27,7 +27,7 @@ CREATE TABLE ProductTags(
 INSERT INTO Categories VALUES (1, 'Mobile Devices', 'Devices that go where you want to go');
 INSERT INTO Categories VALUES (2, 'Wearables', 'Accessorize those mobile devices');
 INSERT INTO Categories VALUES (3, 'Entertainment', 'Be the talk of the town with our TVs, Set Top Boxes, and Surround Sound Systems');
-INSERT INTO Categories VALUES (4, 'Productivity', 'Working from home or office, our computers, laptops and tablets will get help you get it done');
+INSERT INTO Categories VALUES (4, 'Productivity', 'Working from home or office, our computers, laptops and tablets will help you get it done');
 
 -- Products
 INSERT INTO Products VALUES (1, 'iPhone 12', 'Apple phone', 999.99, 3, 1);
@@ -82,9 +82,9 @@ INSERT INTO ProductTags VALUES (21, 'Speed', '5G', 7);
 INSERT INTO ProductTags VALUES (22, 'Connectivity', 'Blue Tooth', 8);
 INSERT INTO ProductTags VALUES (23, 'Connectivity', 'Blue Tooth', 9);
 
-INSERT INTO ProductTags VALUES (24, 'Pixel', '1080', 10);
-INSERT INTO ProductTags VALUES (25, 'Pixel', '4K', 11);
-INSERT INTO ProductTags VALUES (26, 'Pixel', '720', 12);
+INSERT INTO ProductTags VALUES (24, 'Resolution', '1080', 10);
+INSERT INTO ProductTags VALUES (25, 'Resolution', '4K', 11);
+INSERT INTO ProductTags VALUES (26, 'Resolution', '720', 12);
 
 INSERT INTO ProductTags VALUES (27, 'CPU', 'Intel i5', 13);
 INSERT INTO ProductTags VALUES (28, 'CPU Generation', '12', 13);

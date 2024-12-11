@@ -1,11 +1,16 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Data.Sqlite;
 using Tutorial.EntityFrameworkUpdate.Infrastructure.Options;
+using System.Runtime.InteropServices;
+using System.Collections.Immutable;
+using Microsoft.OpenApi.Extensions;
 
 namespace Tutorial.EntityFrameworkUpdate.Infrastructure.Registration;
 
 public static class ServiceCollectionExtension
 {
+
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<DatabaseOptions>(configuration.GetSection(DatabaseOptions.SectionName));
@@ -13,6 +18,13 @@ public static class ServiceCollectionExtension
         // Caching
         services.AddMemoryCache();
 
+        // These two connections are used only to keep the In-Memory databases alive throughout the demo.
+        var dbOptions = configuration.GetSection(DatabaseOptions.SectionName).Get<DatabaseOptions>();
+        services.AddKeyedSingleton<SqliteConnection>("InMemoryReadOnly", CreateInMemoryDatabases(dbOptions.MemoryRO));
+        services.AddKeyedSingleton<SqliteConnection>("InMemoryReadWrite", CreateInMemoryDatabases(dbOptions.MemoryRW));
+
+
+        /*
         // Database Context Factory and Repositories
         services.AddSingleton<IContextFactory<ManageContext>, ManageContextFactory>();
 
@@ -88,8 +100,51 @@ public static class ServiceCollectionExtension
                                                 x.GetRequiredService<CAggregate.WordRepository>())
             );
 
-
+        */
         return services;
+    }
+
+    private static SqliteConnection CreateInMemoryDatabases(string inMemoryConnStr)
+    {
+        const string RESOURCE_NAME = "Inventory.sql";
+        string resourceFQN = GetResourceFQN(RESOURCE_NAME);
+
+        SqliteConnection connection = new SqliteConnection(inMemoryConnStr);
+        connection.Open();
+
+        SqliteCommand command = new SqliteCommand();
+
+        command.CommandType = System.Data.CommandType.Text;
+        command.CommandText = LoadFromResource(resourceFQN);
+        command.Connection = connection;
+        command.ExecuteNonQuery();
+
+        return connection;
+    }
+
+    private static string GetResourceFQN(string resourceName)
+    {
+        var assembly = typeof(ServiceCollectionExtension).Assembly;
+        var resourceNames = assembly.GetManifestResourceNames();
+
+        return resourceNames.Where(x => x.EndsWith(resourceName, StringComparison.OrdinalIgnoreCase))
+                            .First();
+    }
+
+    private static string LoadFromResource(string resourceFQN)
+    {
+        string resourceData;
+        var assembly = typeof(ServiceCollectionExtension).Assembly;
+
+        using (Stream stream = assembly.GetManifestResourceStream(resourceFQN))
+        {
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                resourceData = reader.ReadToEnd();
+            }
+        }
+
+        return resourceData;
     }
 }
 
