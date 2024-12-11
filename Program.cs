@@ -1,3 +1,5 @@
+using MediatR;
+using System.Reflection;
 using Tutorial.EntityFrameworkUpdate.Infrastructure.Registration;
 
 namespace Tutorial.EntityFrameworkUpdate;
@@ -20,6 +22,23 @@ public class Program
 
         // Application services
         builder.Services.AddInfrastructure(builder.Configuration);
+
+        // MediatR and Fluent Validation self discovery
+        // Load selected assemblies
+        Assembly[] assemblies = new Assembly[]
+                {
+                    typeof(Tutorial.EntityFrameworkUpdate.Program).Assembly,
+                };
+
+
+        // FluentValidation
+        // Add all public Validators automatically.  Classes scoped as internal should not be added
+        //services.AddValidatorsFromAssemblies(assemblies, ServiceLifetime.Transient);
+
+        // configure MediatR
+        builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(assemblies));
+        //services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+
 
 
         var app = builder.Build();

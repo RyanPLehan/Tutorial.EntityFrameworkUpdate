@@ -2,8 +2,8 @@
 {
     public class DatabaseOptions
     {
-        public string MemoryRO { get; init; }
-        public string MemoryRW { get; init; }
+        public string ReadOnly { get; init; }
+        public string ReadWrite { get; init; }
 
         internal const string SectionName = "Database";
 

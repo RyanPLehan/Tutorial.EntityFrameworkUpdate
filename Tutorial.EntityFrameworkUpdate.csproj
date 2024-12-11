@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -28,9 +28,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Domain\Inventory\Categories\" />
     <Folder Include="Domain\Inventory\ProductTags\" />
     <Folder Include="Domain\Inventory\Products\" />
+    <Folder Include="Infrastructure\Models\" />
   </ItemGroup>
 
 </Project>
