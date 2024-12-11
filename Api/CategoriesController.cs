@@ -7,7 +7,7 @@ using System.Collections.Immutable;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Tutorial.EntityFrameworkUpdate.Domain.Inventory.Categories.Requests;
 
-namespace Tutorial.EntityFrameworkUpdate.Controllers;
+namespace Tutorial.EntityFrameworkUpdate.Api;
 
 [ApiController]
 [Route("[controller]")]

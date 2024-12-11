@@ -1,4 +1,4 @@
-﻿namespace Tutorial.EntityFrameworkUpdate.Controllers;
+﻿namespace Tutorial.EntityFrameworkUpdate.Api;
 
 internal static class AuthorizationRoles
 {
