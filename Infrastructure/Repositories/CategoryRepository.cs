@@ -7,24 +7,29 @@ namespace Tutorial.EntityFrameworkUpdate.Infrastructure.Repositories;
 
 internal sealed class CategoryRepository : ICategoryRepository
 {
-    private readonly IContextFactory<ReadOnlyContext> _roContextFactory;
-    //private readonly IContextFactory<ReadWriteContext> _rwContextFactory;
+    private readonly IContextFactory<InventoryContext> _contextFactory;
 
-    public CategoryRepository(IContextFactory<ReadOnlyContext> roContextFactory)
+    public CategoryRepository(IContextFactory<InventoryContext> roContextFactory)
     {
         ArgumentNullException.ThrowIfNull(roContextFactory, nameof(roContextFactory));
 
-        _roContextFactory = roContextFactory;
+        _contextFactory = roContextFactory;
     }
 
-    public Task<Category> Add(Category entity, CancellationToken cancellationToken = default(CancellationToken))
+    public async Task<Category> Add(Category category, CancellationToken cancellationToken = default(CancellationToken))
     {
-        throw new NotImplementedException();
+        using (var context = _contextFactory.CreateCommandContext())
+        {
+            context.Categories.Add(category);
+            await context.SaveChangesAsync();
+        }
+
+        return category;
     }
 
-    public Task Delete(Category entity, CancellationToken cancellationToken = default(CancellationToken))
+    public async Task Delete(Category category, CancellationToken cancellationToken = default(CancellationToken))
     {
-        throw new NotImplementedException();
+        await Delete(category.Id, cancellationToken);
     }
 
     public Task Delete(int id, CancellationToken cancellationToken = default(CancellationToken))
@@ -36,7 +41,7 @@ internal sealed class CategoryRepository : ICategoryRepository
     {
         Category? entity = null;
 
-        using (var context = _roContextFactory.CreateQueyContext())
+        using (var context = _contextFactory.CreateQueyContext())
         {
             entity = await context.Categories
                                   .Where(x => x.Id == id)
@@ -50,7 +55,7 @@ internal sealed class CategoryRepository : ICategoryRepository
     {
         Category[] entities;
 
-        using(var context = _roContextFactory.CreateQueyContext())
+        using(var context = _contextFactory.CreateQueyContext())
         {
             entities = await context.Categories
                                     .ToArrayAsync(cancellationToken);
@@ -59,7 +64,7 @@ internal sealed class CategoryRepository : ICategoryRepository
         return entities.ToImmutableArray();
     }
 
-    public Task<Category> Update(Category entity, CancellationToken cancellationToken = default(CancellationToken))
+    public Task<Category> Update(Category category, CancellationToken cancellationToken = default(CancellationToken))
     {
         throw new NotImplementedException();
     }

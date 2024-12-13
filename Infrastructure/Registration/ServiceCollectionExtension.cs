@@ -7,6 +7,7 @@ using Tutorial.EntityFrameworkUpdate.Infrastructure.Repositories;
 using Tutorial.EntityFrameworkUpdate.Infrastructure.Repositories.Decorators;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.AspNetCore.Http.HttpResults;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Tutorial.EntityFrameworkUpdate.Infrastructure.Registration;
 
@@ -22,15 +23,13 @@ public static class ServiceCollectionExtension
 
         // These two connections are used only to keep the In-Memory databases alive throughout the demo.
         var dbOptions = configuration.GetSection(DatabaseOptions.SectionName).Get<DatabaseOptions>();
-        //CreateOnDiskDatabase(dbOptions.ReadOnly);
-        //CreateOnDiskDatabase(dbOptions.ReadWrite);
-        services.AddKeyedSingleton<SqliteConnection>("InMemoryReadOnly", CreateInMemoryDatabase(dbOptions.InventoryRO));
-        services.AddKeyedSingleton<SqliteConnection>("InMemoryReadWrite", CreateInMemoryDatabase(dbOptions.InventoryRW));
+        services.AddKeyedSingleton<SqliteConnection>("InMemoryReadOnly", CreateInMemoryDatabase(dbOptions.Inventory));
+        //CreateOnDiskDatabase(dbOptions.Inventory);
 
 
 
         // Database Context Factories
-        services.AddSingleton<IContextFactory<ReadOnlyContext>, ReadOnlyContextFactory>();
+        services.AddSingleton<IContextFactory<InventoryContext>, InventoryContextFactory>();
 
         // Non-Decorated
         //services.AddSingleton<ICategoryRepository, CategoryRepository>();
@@ -52,38 +51,35 @@ public static class ServiceCollectionExtension
 
     private static SqliteConnection CreateInMemoryDatabase(string databaseName)
     {
-        const string RESOURCE_NAME = "Inventory.sql";
-        string resourceFQN = GetResourceFQN(RESOURCE_NAME);
-
         SqliteConnection connection = new SqliteConnection(BuildConnectionString(databaseName, SqliteOpenMode.Memory));
         connection.Open();
-
-        SqliteCommand command = new SqliteCommand();
-
-        command.CommandType = System.Data.CommandType.Text;
-        command.CommandText = LoadFromResource(resourceFQN);
-        command.Connection = connection;
-        command.ExecuteNonQuery();
+        CreateDatabase(connection);
 
         return connection;
     }
 
     private static void CreateOnDiskDatabase(string databaseName)
     {
-        const string RESOURCE_NAME = "Inventory.sql";
-        string resourceFQN = GetResourceFQN(RESOURCE_NAME);
-
         var dataSource = BuildDataSource(databaseName);
         using (SqliteConnection connection = new SqliteConnection(BuildConnectionString(dataSource, SqliteOpenMode.ReadWriteCreate)))
         {
-            connection.Open();
-            SqliteCommand command = new SqliteCommand();
-
-            command.CommandType = System.Data.CommandType.Text;
-            command.CommandText = LoadFromResource(resourceFQN);
-            command.Connection = connection;
-            command.ExecuteNonQuery();
+            CreateDatabase(connection);
         }
+    }
+
+    private static void CreateDatabase(SqliteConnection conn)
+    {
+        const string RESOURCE_NAME = "Inventory.sql";
+        string resourceFQN = GetResourceFQN(RESOURCE_NAME);
+        SqliteCommand command = new SqliteCommand();
+
+        if (conn.State != System.Data.ConnectionState.Open)
+            conn.Open();
+
+        command.CommandType = System.Data.CommandType.Text;
+        command.CommandText = LoadFromResource(resourceFQN);
+        command.Connection = conn;
+        command.ExecuteNonQuery();
     }
 
     private static string BuildDataSource(string databaseName)

@@ -2,8 +2,7 @@
 {
     public class DatabaseOptions
     {
-        public string InventoryRO { get; init; }
-        public string InventoryRW { get; init; }
+        public string Inventory { get; init; }
 
         internal const string SectionName = "Database";
 

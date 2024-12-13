@@ -51,25 +51,25 @@ internal sealed class CachedCategoryRepository : ICategoryRepository
         return values;
     }
 
-    public async Task<Category> Add(Category entity, CancellationToken cancellationToken = default(CancellationToken))
+    public async Task<Category> Add(Category category, CancellationToken cancellationToken = default(CancellationToken))
     {
-        Category repoEntity = await _repository.Add(entity, cancellationToken);
+        Category repoEntity = await _repository.Add(category, cancellationToken);
         RemoveCacheEntry(CreateCacheKey());
 
         return repoEntity;
     }
 
-    public async Task<Category> Update(Category entity, CancellationToken cancellationToken = default(CancellationToken))
+    public async Task<Category> Update(Category category, CancellationToken cancellationToken = default(CancellationToken))
     {
-        Category repoEntity = await _repository.Update(entity, cancellationToken);
+        Category repoEntity = await _repository.Update(category, cancellationToken);
         RemoveCacheEntry(CreateCacheKey());
 
         return repoEntity;
     }
 
-    public async Task Delete(Category entity, CancellationToken cancellationToken = default(CancellationToken))
+    public async Task Delete(Category category, CancellationToken cancellationToken = default(CancellationToken))
     {
-        await this.Delete(entity.Id, cancellationToken);
+        await this.Delete(category.Id, cancellationToken);
     }
 
     public async Task Delete(int id, CancellationToken cancellationToken = default(CancellationToken))
