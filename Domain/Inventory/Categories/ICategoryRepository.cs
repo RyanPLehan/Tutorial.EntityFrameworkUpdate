@@ -12,5 +12,4 @@ public interface ICategoryRepository
     public Task<Category> Update(Category category, CancellationToken cancellationToken = default(CancellationToken));
 
     public Task Delete(Category category, CancellationToken cancellationToken = default(CancellationToken));
-    public Task Delete(int id, CancellationToken cancellationToken = default(CancellationToken));
 }

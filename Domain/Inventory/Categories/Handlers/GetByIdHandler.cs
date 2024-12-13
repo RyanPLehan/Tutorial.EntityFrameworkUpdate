@@ -6,18 +6,18 @@ using System.Collections.Immutable;
 
 namespace Tutorial.EntityFrameworkUpdate.Domain.Inventory.Categories.Handlers;
 
-internal class GetHandler : IRequestHandler<GetRequest, Category?>
+internal class GetByIdHandler : IRequestHandler<GetById, Category?>
 {
     private readonly ICategoryRepository _repository;
 
-    public GetHandler(ICategoryRepository repository)
+    public GetByIdHandler(ICategoryRepository repository)
     {
         ArgumentNullException.ThrowIfNull(repository, nameof(repository));
 
         _repository = repository;
     }
 
-    public async Task<Category?> Handle(GetRequest request, CancellationToken cancellationToken)
+    public async Task<Category?> Handle(GetById request, CancellationToken cancellationToken)
     {
         return await _repository.Get(request.Id, cancellationToken);
     }

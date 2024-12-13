@@ -6,25 +6,21 @@ using System.Collections.Immutable;
 
 namespace Tutorial.EntityFrameworkUpdate.Domain.Inventory.Categories.Handlers;
 
-internal class AddHandler : IRequestHandler<Add, Category>
+internal class DeleteByIdHandler : IRequestHandler<DeleteById>
 {
     private readonly ICategoryRepository _repository;
 
-    public AddHandler(ICategoryRepository repository)
+    public DeleteByIdHandler(ICategoryRepository repository)
     {
         ArgumentNullException.ThrowIfNull(repository, nameof(repository));
 
         _repository = repository;
     }
 
-    public async Task<Category> Handle(Add request, CancellationToken cancellationToken)
+    public async Task Handle(DeleteById request, CancellationToken cancellationToken)
     {
-        Category entity = new Category()
-        {
-            Name = request.Name,
-            Description = request.Description,
-        };
-
-        return await _repository.Add(entity, cancellationToken);
+        var entity = await _repository.Get(request.Id);
+        if (entity != null)
+            await _repository.Delete(entity);
     }
 }

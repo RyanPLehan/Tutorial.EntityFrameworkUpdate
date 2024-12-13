@@ -4,6 +4,7 @@ using Tutorial.EntityFrameworkUpdate.Domain.Inventory.Models;
 
 namespace Tutorial.EntityFrameworkUpdate.Domain.Inventory.Categories.Requests;
 
-public class GetAllRequest : IRequest<ImmutableArray<Category>>
+public class GetById : IRequest<Category?>
 {
+    public int Id { get; init; }
 }

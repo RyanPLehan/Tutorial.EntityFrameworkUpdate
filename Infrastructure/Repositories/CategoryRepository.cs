@@ -2,6 +2,7 @@
 using Tutorial.EntityFrameworkUpdate.Domain.Inventory.Categories;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Immutable;
+using Tutorial.EntityFrameworkUpdate.Domain.Inventory.Categories.Requests;
 
 namespace Tutorial.EntityFrameworkUpdate.Infrastructure.Repositories;
 
@@ -18,6 +19,8 @@ internal sealed class CategoryRepository : ICategoryRepository
 
     public async Task<Category> Add(Category category, CancellationToken cancellationToken = default(CancellationToken))
     {
+        ArgumentNullException.ThrowIfNull(category);
+
         using (var context = _contextFactory.CreateCommandContext())
         {
             context.Categories.Add(category);
@@ -29,12 +32,13 @@ internal sealed class CategoryRepository : ICategoryRepository
 
     public async Task Delete(Category category, CancellationToken cancellationToken = default(CancellationToken))
     {
-        await Delete(category.Id, cancellationToken);
-    }
+        ArgumentNullException.ThrowIfNull(category);
 
-    public Task Delete(int id, CancellationToken cancellationToken = default(CancellationToken))
-    {
-        throw new NotImplementedException();
+        using (var context = _contextFactory.CreateCommandContext())
+        {
+            context.Categories.Remove(category);
+            await context.SaveChangesAsync();
+        }
     }
 
     public async Task<Category?> Get(int id, CancellationToken cancellationToken = default(CancellationToken))
@@ -66,6 +70,8 @@ internal sealed class CategoryRepository : ICategoryRepository
 
     public Task<Category> Update(Category category, CancellationToken cancellationToken = default(CancellationToken))
     {
+        ArgumentNullException.ThrowIfNull(category);
+
         throw new NotImplementedException();
     }
 }

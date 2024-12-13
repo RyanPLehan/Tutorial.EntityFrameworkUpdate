@@ -30,9 +30,23 @@ internal sealed class CachedCategoryRepository : ICategoryRepository
     }
 
 
+    public async Task<Category> Add(Category category, CancellationToken cancellationToken = default(CancellationToken))
+    {
+        Category repoEntity = await _repository.Add(category, cancellationToken);
+        RemoveCacheEntry(CreateCacheKey());
+
+        return repoEntity;
+    }
+
+    public async Task Delete(Category category, CancellationToken cancellationToken = default(CancellationToken))
+    {
+        await _repository.Delete(category, cancellationToken);
+        RemoveCacheEntry(CreateCacheKey());
+    }
+
     public async Task<Category?> Get(int id, CancellationToken cancellationToken = default(CancellationToken))
     {
-        ImmutableArray<Category> entities = await GetAll(cancellationToken);
+        ImmutableArray<Category> entities = await this.GetAll(cancellationToken);    // Read from cache
         return entities.Where(x => x.Id == id)
                        .FirstOrDefault();
     }
@@ -51,14 +65,6 @@ internal sealed class CachedCategoryRepository : ICategoryRepository
         return values;
     }
 
-    public async Task<Category> Add(Category category, CancellationToken cancellationToken = default(CancellationToken))
-    {
-        Category repoEntity = await _repository.Add(category, cancellationToken);
-        RemoveCacheEntry(CreateCacheKey());
-
-        return repoEntity;
-    }
-
     public async Task<Category> Update(Category category, CancellationToken cancellationToken = default(CancellationToken))
     {
         Category repoEntity = await _repository.Update(category, cancellationToken);
@@ -67,16 +73,7 @@ internal sealed class CachedCategoryRepository : ICategoryRepository
         return repoEntity;
     }
 
-    public async Task Delete(Category category, CancellationToken cancellationToken = default(CancellationToken))
-    {
-        await this.Delete(category.Id, cancellationToken);
-    }
 
-    public async Task Delete(int id, CancellationToken cancellationToken = default(CancellationToken))
-    {
-        await _repository.Delete(id, cancellationToken);
-        RemoveCacheEntry(CreateCacheKey());
-    }
 
     private MemoryCacheEntryOptions CreateMemoryCacheEntryOptions(int entryExpirationInSeconds)
     {

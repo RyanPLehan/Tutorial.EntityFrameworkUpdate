@@ -23,6 +23,10 @@ public class CategoriesController : ControllerBase
             public string Name { get; init; } = null;
             public string Description { get; init; } = null;
         }
+        public class Update
+        {
+            public string Description { get; init; } = null;
+        }
     }
 
     public CategoriesController(ILogger<CategoriesController> logger,
@@ -36,53 +40,13 @@ public class CategoriesController : ControllerBase
     }
 
     [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    //[Authorize(Roles = AuthorizationRoles.Read + ", " + AuthorizationRoles.Write)]
-    public async Task<ActionResult<ItemList<Category>>> GetAll()
-    {
-        var request = new GetAllRequest();
-        var response = await _mediator.Send(request);
-
-        if (response == null || response.IsEmpty)
-            return NoContent();
-        else
-        {
-            // Bad practice to return just an array of items.  Should include a at least one property
-            return Ok(new ItemList<Category>() { Items = response });
-        }
-            
-    }
-
-    [HttpGet]
-    [Route("{id:int}")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    //[Authorize(Roles = AuthorizationRoles.Read + ", " + AuthorizationRoles.Write)]
-    public async Task<ActionResult<Category>> GetDetail([FromRoute] int id)
-    {
-        if (id <= 0)
-            return BadRequest();
-
-        var request = new GetRequest() { Id = id };
-        var response = await _mediator.Send(request);
-
-        if (response == null)
-            return NotFound();
-        else
-            return Ok(response);
-    }
-
-
-    [HttpGet]
     [Route("{id:int}/Products")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     //[Authorize(Roles = AuthorizationRoles.Read + ", " + AuthorizationRoles.Write)]
     public async Task<ActionResult<ItemList<Product>>> GetProducts([FromRoute] int id)
     {
-        var request = new GetAllRequest();
+        var request = new GetAll();
         var response = await _mediator.Send(request);
 
         if (response == null || response.IsEmpty)
@@ -100,7 +64,7 @@ public class CategoriesController : ControllerBase
         if (entity == null)
             return BadRequest();
 
-        var request = new AddRequest()
+        var request = new Add()
         {
             Name = entity.Name,
             Description = entity.Description,
@@ -113,5 +77,71 @@ public class CategoriesController : ControllerBase
         else
             return CreatedAtAction(nameof(GetDetail), new { id = response.Id }, response);
     }
+
+
+    [HttpDelete]
+    [Route("{id:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    //[Authorize(Roles = AuthorizationRoles.Read + ", " + AuthorizationRoles.Write)]
+    public async Task<ActionResult> Delete([FromRoute] int id)
+    {
+        if (id <= 0)
+            return BadRequest();
+
+        var getRequest = new GetById() { Id = id };
+        var getResponse = await _mediator.Send(getRequest);
+
+        if (getResponse == null)
+            return NotFound();
+        else
+        {
+            var delRequest = new Delete() { Category = getResponse };
+            await _mediator.Send(delRequest);
+            return Ok();
+        }
+    }
+
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    //[Authorize(Roles = AuthorizationRoles.Read + ", " + AuthorizationRoles.Write)]
+    public async Task<ActionResult<ItemList<Category>>> GetAll()
+    {
+        var request = new GetAll();
+        var response = await _mediator.Send(request);
+
+        if (response == null || response.IsEmpty)
+            return NoContent();
+        else
+        {
+            // Bad practice to return just an array of items.  Should include a at least one property
+            return Ok(new ItemList<Category>() { Items = response });
+        }
+
+    }
+
+    [HttpGet]
+    [Route("{id:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    //[Authorize(Roles = AuthorizationRoles.Read + ", " + AuthorizationRoles.Write)]
+    public async Task<ActionResult<Category>> GetDetail([FromRoute] int id)
+    {
+        if (id <= 0)
+            return BadRequest();
+
+        var request = new GetById() { Id = id };
+        var response = await _mediator.Send(request);
+
+        if (response == null)
+            return NotFound();
+        else
+            return Ok(response);
+    }
+
+
 
 }
