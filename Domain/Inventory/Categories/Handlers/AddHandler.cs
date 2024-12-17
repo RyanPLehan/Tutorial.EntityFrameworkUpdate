@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Tutorial.EntityFrameworkUpdate.Domain.Inventory.Models;
-using Tutorial.EntityFrameworkUpdate.Domain.Inventory.Categories;
 using Tutorial.EntityFrameworkUpdate.Domain.Inventory.Categories.Requests;
 using System.Collections.Immutable;
 

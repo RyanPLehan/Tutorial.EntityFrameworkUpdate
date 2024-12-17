@@ -5,6 +5,7 @@ using MediatR;
 using Tutorial.EntityFrameworkUpdate.Api.Models;
 using Tutorial.EntityFrameworkUpdate.Domain.Inventory.Models;
 using Tutorial.EntityFrameworkUpdate.Domain.Inventory.Categories.Requests;
+using System.Net;
 
 namespace Tutorial.EntityFrameworkUpdate.Api;
 
@@ -23,9 +24,15 @@ public class CategoriesController : ControllerBase
             public string Name { get; init; } = null;
             public string Description { get; init; } = null;
         }
+
         public class Update
         {
             public string Description { get; init; } = null;
+        }
+
+        public class Select
+        {
+            public IEnumerable<int> Ids { get; init; } = Enumerable.Empty<int>();
         }
     }
 
@@ -90,17 +97,9 @@ public class CategoriesController : ControllerBase
         if (id <= 0)
             return BadRequest();
 
-        var getRequest = new GetById() { Id = id };
-        var getResponse = await _mediator.Send(getRequest);
-
-        if (getResponse == null)
-            return NotFound();
-        else
-        {
-            var delRequest = new Delete() { Category = getResponse };
-            await _mediator.Send(delRequest);
-            return Ok();
-        }
+        var request = new DeleteById() { Id = id };
+        await _mediator.Send(request);
+        return Ok();
     }
 
     [HttpGet]
@@ -115,10 +114,8 @@ public class CategoriesController : ControllerBase
         if (response == null || response.IsEmpty)
             return NoContent();
         else
-        {
             // Bad practice to return just an array of items.  Should include a at least one property
             return Ok(new ItemList<Category>() { Items = response });
-        }
 
     }
 
@@ -142,6 +139,27 @@ public class CategoriesController : ControllerBase
             return Ok(response);
     }
 
+    [HttpPut]
+    [Route("{id:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    //[Authorize(Roles = AuthorizationRoles.Read + ", " + AuthorizationRoles.Write)]
+    public async Task<ActionResult<Category>> Update([FromRoute] int id, [FromBody] Item.Update entity)
+    {
+        if (id <= 0)
+            return BadRequest();
 
+        var getRequest = new GetById() { Id = id };
+        var getResponse = await _mediator.Send(getRequest);
 
+        if (getResponse == null)
+            return NotFound();
+        else
+        {
+            var updRequest = new Update() { Id = id, Description = entity.Description };
+            var updResponse = await _mediator.Send(updRequest);
+            return Ok(updResponse);
+        }
+    }
 }

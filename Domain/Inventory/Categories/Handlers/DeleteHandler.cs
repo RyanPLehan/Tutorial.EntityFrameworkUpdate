@@ -19,6 +19,6 @@ internal class DeleteHandler : IRequestHandler<Delete>
     public async Task Handle(Delete request, CancellationToken cancellationToken)
     {
         if (request.Category != null)
-            await _repository.Delete(request.Category);
+            await _repository.Delete(request.Category, cancellationToken);
     }
 }

@@ -24,7 +24,7 @@ internal sealed class CategoryRepository : ICategoryRepository
         using (var context = _contextFactory.CreateCommandContext())
         {
             context.Categories.Add(category);
-            await context.SaveChangesAsync();
+            await context.SaveChangesAsync(cancellationToken);
         }
 
         return category;
@@ -37,7 +37,27 @@ internal sealed class CategoryRepository : ICategoryRepository
         using (var context = _contextFactory.CreateCommandContext())
         {
             context.Categories.Remove(category);
-            await context.SaveChangesAsync();
+            await context.SaveChangesAsync(cancellationToken);
+        }
+    }
+
+    public async Task Delete(int id, CancellationToken cancellationToken = default(CancellationToken))
+    {
+        using (var context = _contextFactory.CreateCommandContext())
+        {
+            await context.Categories
+                         .Where(x => x.Id == id)
+                         .ExecuteDeleteAsync(cancellationToken);
+        }
+    }
+
+    public async Task Delete(IEnumerable<int> ids, CancellationToken cancellationToken = default(CancellationToken))
+    {
+        using (var context = _contextFactory.CreateCommandContext())
+        {
+            await context.Categories
+                         .Where(x => ids.Contains(x.Id))
+                         .ExecuteDeleteAsync(cancellationToken);
         }
     }
 
@@ -55,6 +75,20 @@ internal sealed class CategoryRepository : ICategoryRepository
         return entity;
     }
 
+    public async Task<ImmutableArray<Category>> Get(IEnumerable<int> ids, CancellationToken cancellationToken = default(CancellationToken))
+    {
+        Category[] entities;
+
+        using (var context = _contextFactory.CreateQueyContext())
+        {
+            entities = await context.Categories
+                                    .Where(x => ids.Contains(x.Id))
+                                    .ToArrayAsync(cancellationToken);
+        }
+
+        return entities.ToImmutableArray();
+    }
+
     public async Task<ImmutableArray<Category>> GetAll(CancellationToken cancellationToken = default(CancellationToken))
     {
         Category[] entities;
@@ -68,10 +102,16 @@ internal sealed class CategoryRepository : ICategoryRepository
         return entities.ToImmutableArray();
     }
 
-    public Task<Category> Update(Category category, CancellationToken cancellationToken = default(CancellationToken))
+    public async Task<Category> Update(Category category, CancellationToken cancellationToken = default(CancellationToken))
     {
         ArgumentNullException.ThrowIfNull(category);
 
-        throw new NotImplementedException();
+        using (var context = _contextFactory.CreateCommandContext())
+        {
+            context.Categories.Update(category);
+            await context.SaveChangesAsync(cancellationToken);
+        }
+
+        return category;
     }
 }

@@ -1,22 +1,24 @@
 ﻿using MediatR;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using Tutorial.EntityFrameworkUpdate.Domain.Inventory.Models;
 using Tutorial.EntityFrameworkUpdate.Domain.Inventory.Categories.Requests;
 
 namespace Tutorial.EntityFrameworkUpdate.Domain.Inventory.Categories.Handlers;
 
-internal class GetByIdHandler : IRequestHandler<GetById, Category?>
+internal class GetByIdsHandler : IRequestHandler<GetByIds, ImmutableArray<Category>>
 {
     private readonly ICategoryRepository _repository;
 
-    public GetByIdHandler(ICategoryRepository repository)
+    public GetByIdsHandler(ICategoryRepository repository)
     {
         ArgumentNullException.ThrowIfNull(repository, nameof(repository));
 
         _repository = repository;
     }
 
-    public async Task<Category?> Handle(GetById request, CancellationToken cancellationToken)
+    public async Task<ImmutableArray<Category>> Handle(GetByIds request, CancellationToken cancellationToken)
     {
-        return await _repository.Get(request.Id, cancellationToken);
+        return await _repository.Get(request.Ids, cancellationToken);
     }
 }

@@ -44,11 +44,30 @@ internal sealed class CachedCategoryRepository : ICategoryRepository
         RemoveCacheEntry(CreateCacheKey());
     }
 
+    public async Task Delete(int id, CancellationToken cancellationToken = default(CancellationToken))
+    {
+        await _repository.Delete(id, cancellationToken);
+        RemoveCacheEntry(CreateCacheKey());
+    }
+
+    public async Task Delete(IEnumerable<int> ids, CancellationToken cancellationToken = default(CancellationToken))
+    {
+        await _repository.Delete(ids, cancellationToken);
+        RemoveCacheEntry(CreateCacheKey());
+    }
+
     public async Task<Category?> Get(int id, CancellationToken cancellationToken = default(CancellationToken))
     {
         ImmutableArray<Category> entities = await this.GetAll(cancellationToken);    // Read from cache
         return entities.Where(x => x.Id == id)
                        .FirstOrDefault();
+    }
+
+    public async Task<ImmutableArray<Category>> Get(IEnumerable<int> ids, CancellationToken cancellationToken = default(CancellationToken))
+    {
+        ImmutableArray<Category> entities = await this.GetAll(cancellationToken);    // Read from cache
+        return entities.Where(x => ids.Contains(x.Id))
+                       .ToImmutableArray();
     }
 
     public async Task<ImmutableArray<Category>> GetAll(CancellationToken cancellationToken = default(CancellationToken))
