@@ -7,5 +7,5 @@ namespace Tutorial.EntityFrameworkUpdate.Domain.Inventory.Categories.Requests;
 
 public class GetByIds : IRequest<ImmutableArray<Category>>
 {
-    public IEnumerable<int> Ids { get; init; }
+    public required IEnumerable<int> Ids { get; init; }
 }

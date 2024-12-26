@@ -29,7 +29,6 @@
 
   <ItemGroup>
     <Folder Include="Domain\Inventory\ProductTags\" />
-    <Folder Include="Domain\Inventory\Products\" />
     <Folder Include="Infrastructure\Models\" />
   </ItemGroup>
 

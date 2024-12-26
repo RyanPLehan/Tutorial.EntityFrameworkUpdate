@@ -5,7 +5,7 @@ using MediatR;
 using Tutorial.EntityFrameworkUpdate.Api.Models;
 using Tutorial.EntityFrameworkUpdate.Domain.Inventory.Models;
 using Tutorial.EntityFrameworkUpdate.Domain.Inventory.Categories.Requests;
-using System.Net;
+using ProductReq = Tutorial.EntityFrameworkUpdate.Domain.Inventory.Products.Requests;
 
 namespace Tutorial.EntityFrameworkUpdate.Api;
 
@@ -46,26 +46,10 @@ public class CategoriesController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpGet]
-    [Route("{id:int}/Products")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    //[Authorize(Roles = AuthorizationRoles.Read + ", " + AuthorizationRoles.Write)]
-    public async Task<ActionResult<ItemList<Product>>> GetProducts([FromRoute] int id)
-    {
-        var request = new GetAll();
-        var response = await _mediator.Send(request);
-
-        if (response == null || response.IsEmpty)
-            return NoContent();
-        else
-            return Ok(response);
-    }
-
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    //[Authorize(Roles = AuthorizationRoles.Read + ", " + AuthorizationRoles.Write)]
+    //[Authorize(Roles = AuthorizationRoles.Write + ", " + AuthorizationRoles.Admin)]
     public async Task<ActionResult<Category>> Add([FromBody] Item.Add entity)
     {
         if (entity == null)
@@ -91,7 +75,7 @@ public class CategoriesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    //[Authorize(Roles = AuthorizationRoles.Read + ", " + AuthorizationRoles.Write)]
+    //[Authorize(Roles = AuthorizationRoles.Admin)]
     public async Task<ActionResult> Delete([FromRoute] int id)
     {
         if (id <= 0)
@@ -105,7 +89,7 @@ public class CategoriesController : ControllerBase
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    //[Authorize(Roles = AuthorizationRoles.Read + ", " + AuthorizationRoles.Write)]
+    //[Authorize(Roles = AuthorizationRoles.Read + ", " + AuthorizationRoles.Write + ", " + AuthorizationRoles.Admin)]
     public async Task<ActionResult<ItemList<Category>>> GetAll()
     {
         var request = new GetAll();
@@ -124,7 +108,7 @@ public class CategoriesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    //[Authorize(Roles = AuthorizationRoles.Read + ", " + AuthorizationRoles.Write)]
+    //[Authorize(Roles = AuthorizationRoles.Read + ", " + AuthorizationRoles.Write + ", " + AuthorizationRoles.Admin)]
     public async Task<ActionResult<Category>> GetDetail([FromRoute] int id)
     {
         if (id <= 0)
@@ -139,12 +123,65 @@ public class CategoriesController : ControllerBase
             return Ok(response);
     }
 
+    [HttpGet]
+    [Route("{id:int}/Products")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    //[Authorize(Roles = AuthorizationRoles.Read + ", " + AuthorizationRoles.Write + ", " + AuthorizationRoles.Admin)]
+    public async Task<ActionResult<ItemList<Product>>> GetProducts([FromRoute] int id)
+    {
+        if (id <= 0)
+            return BadRequest();
+
+        var request = new ProductReq.GetByCategory() { CategoryId = id };
+        var response = await _mediator.Send(request);
+
+        if (response == null || response.IsEmpty)
+            return NoContent();
+        else
+            return Ok(response);
+    }
+
+
+    [HttpPatch]
+    [Route("{oldId:int}/{newId:int")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    //[Authorize(Roles = AuthorizationRoles.Admin)]
+    public async Task<ActionResult> Replace([FromRoute] int oldId, [FromRoute] int newId)
+    {
+        if (oldId <= 0 || newId <= 0)
+            return BadRequest();
+
+
+        ActionResult actionResult;
+        try
+        {
+            var request = new Replace()
+            {
+                OldCategoryId = oldId,
+                NewCategoryId = newId,
+            };
+
+            await _mediator.Send(request);
+            actionResult = Ok();
+        }
+        catch
+        {
+            actionResult = NotFound();
+        }
+
+        return actionResult;
+    }
+
+
     [HttpPut]
     [Route("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    //[Authorize(Roles = AuthorizationRoles.Read + ", " + AuthorizationRoles.Write)]
+    //[Authorize(Roles = AuthorizationRoles.Write + ", " + AuthorizationRoles.Admin)]
     public async Task<ActionResult<Category>> Update([FromRoute] int id, [FromBody] Item.Update entity)
     {
         if (id <= 0)
