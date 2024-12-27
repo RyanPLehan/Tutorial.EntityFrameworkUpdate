@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Data.Sqlite;
 using Tutorial.EntityFrameworkUpdate.Domain.Inventory.Categories;
+using Tutorial.EntityFrameworkUpdate.Domain.Inventory.Products;
 using Tutorial.EntityFrameworkUpdate.Infrastructure.Options;
 using Tutorial.EntityFrameworkUpdate.Infrastructure.Repositories;
 using Tutorial.EntityFrameworkUpdate.Infrastructure.Repositories.Decorators;
@@ -33,6 +34,7 @@ public static class ServiceCollectionExtension
 
         // Non-Decorated
         //services.AddSingleton<ICategoryRepository, CategoryRepository>();
+        services.AddSingleton<IProductRepository, ProductRepository>();
 
 
         // Decorated (must use this pattern)

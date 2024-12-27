@@ -4,15 +4,15 @@ using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using Tutorial.EntityFrameworkUpdate.Api.Models;
 using Tutorial.EntityFrameworkUpdate.Domain.Inventory.Models;
-using Tutorial.EntityFrameworkUpdate.Domain.Inventory.Categories.Requests;
-using ProductReq = Tutorial.EntityFrameworkUpdate.Domain.Inventory.Products.Requests;
+using Tutorial.EntityFrameworkUpdate.Domain.Inventory.Products.Requests;
+//using ProductTagReq = Tutorial.EntityFrameworkUpdate.Domain.Inventory.ProductTags.Requests;
 
 namespace Tutorial.EntityFrameworkUpdate.Api;
 
 [ApiController]
 [Route("[controller]")]
 //[Authorize]
-public class CategoriesController : ControllerBase
+public class ProductsController : ControllerBase
 {
     private readonly IMediator _mediator;
     private readonly ILogger _logger;
@@ -21,18 +21,30 @@ public class CategoriesController : ControllerBase
     {
         public class Add
         {
-            public string Name { get; init; } = null;
-            public string Description { get; init; } = null;
+            public string Name { get; init; }
+            public string Description { get; init; }
+            public decimal Price { get; init; }
+            public int Quantity { get; init; }
+            public int CategoryId { get; init; }
         }
 
         public class Update
         {
-            public string Description { get; init; } = null;
+            public string Description { get; init; }
+            public decimal Price { get; init; }
+            public int Quantity { get; init; }
+        }
+
+        public class Patch
+        {
+            public string? Description { get; init; } = null;
+            public decimal? Price { get; init; } = null;
+            public int? Quantity { get; set; } = null;
         }
     }
 
-    public CategoriesController(ILogger<CategoriesController> logger,
-                                IMediator mediator)
+    public ProductsController(ILogger<ProductsController> logger,
+                              IMediator mediator)
     {
         ArgumentNullException.ThrowIfNull(logger, nameof(logger));
         ArgumentNullException.ThrowIfNull(mediator, nameof(mediator));
@@ -45,7 +57,7 @@ public class CategoriesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     //[Authorize(Roles = AuthorizationRoles.Write + ", " + AuthorizationRoles.Admin)]
-    public async Task<ActionResult<Category>> Add([FromBody] Item.Add entity)
+    public async Task<ActionResult<Product>> Add([FromBody] Item.Add entity)
     {
         if (entity == null)
             return BadRequest();
@@ -54,6 +66,9 @@ public class CategoriesController : ControllerBase
         {
             Name = entity.Name,
             Description = entity.Description,
+            Price = entity.Price,
+            Quantity = entity.Quantity,
+            CategoryId = entity.CategoryId,
         };
 
         var response = await _mediator.Send(request);
@@ -85,16 +100,16 @@ public class CategoriesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     //[Authorize(Roles = AuthorizationRoles.Read + ", " + AuthorizationRoles.Write + ", " + AuthorizationRoles.Admin)]
-    public async Task<ActionResult<ItemList<Category>>> GetAll()
+    public async Task<ActionResult<ItemList<Product>>> GetByCategory([FromQuery] int categoryid = 0)
     {
-        var request = new GetAll();
+        var request = new GetByCategory() { CategoryId = categoryid };
         var response = await _mediator.Send(request);
 
         if (response == null || response.IsEmpty)
             return NoContent();
         else
             // Bad practice to return just an array of items.  Should include a at least one property
-            return Ok(new ItemList<Category>() { Items = response });
+            return Ok(new ItemList<Product>() { Items = response });
 
     }
 
@@ -104,7 +119,7 @@ public class CategoriesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     //[Authorize(Roles = AuthorizationRoles.Read + ", " + AuthorizationRoles.Write + ", " + AuthorizationRoles.Admin)]
-    public async Task<ActionResult<Category>> GetDetail([FromRoute] int id)
+    public async Task<ActionResult<Product>> GetDetail([FromRoute] int id)
     {
         if (id <= 0)
             return BadRequest();
@@ -118,42 +133,38 @@ public class CategoriesController : ControllerBase
             return Ok(response);
     }
 
+
     [HttpPatch]
-    [Route("{oldId:int}/{newId:int}")]
+    [Route("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     //[Authorize(Roles = AuthorizationRoles.Admin)]
-    public async Task<ActionResult> Replace([FromRoute] int oldId, [FromRoute] int newId)
+    public async Task<ActionResult<Product>> Replace([FromRoute] int id, [FromBody] Item.Patch entity)
     {
+        // Demostrate how to use the HTTP Patch method to update any number of fields
+        // This example allows the updating of 1 to 3 fields.
 
         // It should be noted, that I personally do not like using the HTTP Patch method to update specific fields.
         // I believe that it should be used for the purpose of modifying collection items (ie add/delete items to/from a list)
-        // However, this particular case does update a list of products by replacing one category id for another
 
-
-        if (oldId <= 0 || newId <= 0)
+        if (id <= 0)
             return BadRequest();
 
-
-        ActionResult actionResult;
-        try
+        var request = new Patch()
         {
-            var request = new Replace()
-            {
-                OldCategoryId = oldId,
-                NewCategoryId = newId,
-            };
+            Id = id,
+            Description = entity.Description,
+            Price = entity.Price,
+            Quantity = entity.Quantity,
+        };
 
-            await _mediator.Send(request);
-            actionResult = Ok();
-        }
-        catch
-        {
-            actionResult = NotFound();
-        }
+        var response = await _mediator.Send(request);
 
-        return actionResult;
+        if (response == null)
+            return NotFound();
+        else
+            return Ok(response);
     }
 
 
@@ -163,42 +174,84 @@ public class CategoriesController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     //[Authorize(Roles = AuthorizationRoles.Write + ", " + AuthorizationRoles.Admin)]
-    public async Task<ActionResult<Category>> Update([FromRoute] int id, [FromBody] Item.Update entity)
+    public async Task<ActionResult<Product>> Update([FromRoute] int id, [FromBody] Item.Update entity)
     {
         if (id <= 0)
             return BadRequest();
 
-        var getRequest = new GetById() { Id = id };
-        var getResponse = await _mediator.Send(getRequest);
+        var request = new Update()
+        {
+            Id = id,
+            Description = entity.Description,
+            Price = entity.Price,
+            Quantity = entity.Quantity,
+        };
 
-        if (getResponse == null)
+        var response = await _mediator.Send(request);
+
+        if (response == null)
             return NotFound();
         else
-        {
-            var updRequest = new Update() { Id = id, Description = entity.Description };
-            var updResponse = await _mediator.Send(updRequest);
-            return Ok(updResponse);
-        }
+            return Ok(response);
     }
 
-    #region Products
+
+    #region Tags
     [HttpGet]
-    [Route("{id:int}/Products")]
+    [Route("{id:int}/Tags")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     //[Authorize(Roles = AuthorizationRoles.Read + ", " + AuthorizationRoles.Write + ", " + AuthorizationRoles.Admin)]
-    public async Task<ActionResult<ItemList<Product>>> GetProducts([FromRoute] int id)
+    public async Task<ActionResult<ItemList<Product>>> GetTags([FromRoute] int id)
     {
         if (id <= 0)
             return BadRequest();
 
-        var request = new ProductReq.GetByCategory() { CategoryId = id };
+        return NoContent();
+
+        /*
+        var request = new ProductReq.GetByProduct() { ProductId = id };
         var response = await _mediator.Send(request);
 
         if (response == null || response.IsEmpty)
             return NoContent();
         else
             return Ok(response);
+        */
     }
+
+
+    [HttpPatch]
+    [Route("{id:int}/Tags")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    //[Authorize(Roles = AuthorizationRoles.Admin)]
+    public async Task<ActionResult<Product>> PatchTags([FromRoute] int id, [FromBody] TagList tags)
+    {
+        // Demostrate how to use the HTTP Patch method to modify a collection of items (add/delete to/from a list)
+
+        if (id <= 0)
+            return BadRequest();
+        return Ok();
+        /*
+        var request = new Patch()
+        {
+            Id = id,
+            Description = entity.Description,
+            Price = entity.Price,
+            Quantity = entity.Quantity,
+        };
+
+        var response = await _mediator.Send(request);
+
+        if (response == null)
+            return NotFound();
+        else
+            return Ok(response);
+        */
+    }
+
+
     #endregion
 }

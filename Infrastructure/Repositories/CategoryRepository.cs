@@ -67,6 +67,7 @@ internal sealed class CategoryRepository : ICategoryRepository
 
         using (var context = _contextFactory.CreateQueyContext())
         {
+            // The query context, by default, does not enable tracking of the entity
             entity = await context.Categories
                                   .Where(x => x.Id == id)
                                   .FirstOrDefaultAsync(cancellationToken);
@@ -81,6 +82,7 @@ internal sealed class CategoryRepository : ICategoryRepository
 
         using (var context = _contextFactory.CreateQueyContext())
         {
+            // The query context, by default, does not enable tracking of the entities
             entities = await context.Categories
                                     .Where(x => ids.Contains(x.Id))
                                     .ToArrayAsync(cancellationToken);
@@ -95,7 +97,9 @@ internal sealed class CategoryRepository : ICategoryRepository
 
         using(var context = _contextFactory.CreateQueyContext())
         {
+            // The query context, by default, does not enable tracking of the entities
             entities = await context.Categories
+                                    .OrderBy(x => x.Name)
                                     .ToArrayAsync(cancellationToken);
         }
 
@@ -104,6 +108,11 @@ internal sealed class CategoryRepository : ICategoryRepository
 
     public async Task<Category> Update(Category category, CancellationToken cancellationToken = default(CancellationToken))
     {
+        // Since we only want EF to generate a FULL UPDATE statement, we need to do the following
+        // 1. Add the object being passed in to the context using the Update method
+        //    The object being passed in is NOT being tracked
+        // 2. Save the changes
+
         ArgumentNullException.ThrowIfNull(category);
 
         using (var context = _contextFactory.CreateCommandContext())

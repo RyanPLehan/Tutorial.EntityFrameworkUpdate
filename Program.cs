@@ -15,7 +15,7 @@ public class Program
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddSwaggerGen(cfg => cfg.CustomSchemaIds(x => x.FullName));        // Needed to allow for Namespace
         builder.Logging.AddConsole();
         builder.Logging.AddDebug();
 
