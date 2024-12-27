@@ -18,6 +18,6 @@ internal class GetByCategoryHandler : IRequestHandler<GetByCategory, ImmutableAr
 
     public async Task<ImmutableArray<Product>> Handle(GetByCategory request, CancellationToken cancellationToken)
     {
-        return await _repository.GetByCategory(request.CategoryId, cancellationToken);
+        return await _repository.FindByCategory(request.CategoryId, cancellationToken);
     }
 }

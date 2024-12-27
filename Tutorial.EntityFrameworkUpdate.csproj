@@ -27,9 +27,4 @@
     <PackageReference Include="System.Text.Json" Version="9.0.0" />    
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Domain\Inventory\ProductTags\" />
-    <Folder Include="Infrastructure\Models\" />
-  </ItemGroup>
-
 </Project>

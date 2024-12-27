@@ -5,7 +5,8 @@ CREATE TABLE Category
     Description TEXT NOT NULL
 );
 
-CREATE TABLE Product(
+CREATE TABLE Product
+(
     ProductID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     ProductName TEXT NOT NULL,
     Description TEXT NOT NULL,
@@ -15,12 +16,34 @@ CREATE TABLE Product(
 	FOREIGN KEY (CategoryID) REFERENCES Category (CategoryID)
 );
 
-CREATE TABLE ProductTag(
-    ProductTagID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+CREATE TABLE ProductTag
+(
+    TagID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     TagName TEXT NOT NULL,
 	TagValue TEXT NULL,
     ProductID INTEGER NOT NULL,
 	FOREIGN KEY (ProductID) REFERENCES Product (ProductID)
+);
+
+
+CREATE INDEX IF NOT EXISTS FKIDX_Product_CategoryId
+    ON Product 
+(
+    CategoryID
+);
+
+CREATE INDEX IF NOT EXISTS FKIDX_ProductTag_ProductId
+    ON ProductTag
+(
+    ProductID
+);
+
+
+CREATE UNIQUE INDEX IF NOT EXISTS UIDX_ProductTag_TagName
+    ON ProductTag 
+(
+    ProductID,
+    TagName
 );
 
 -- Category
