@@ -14,12 +14,14 @@ internal sealed class InventoryContext : DbContext
 
     internal DbSet<Category> Categories { get; set; }
     internal DbSet<Product> Products { get; set; }
+    internal DbSet<ProductTag> ProductTags { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new CategoryConfig());
         modelBuilder.ApplyConfiguration(new ProductConfig());
+        modelBuilder.ApplyConfiguration(new ProductTagConfig());
 
         /*
         modelBuilder.Entity<Category>().HasNoKey();

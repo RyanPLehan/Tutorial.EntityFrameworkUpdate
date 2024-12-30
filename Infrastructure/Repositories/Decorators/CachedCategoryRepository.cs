@@ -50,12 +50,6 @@ internal sealed class CachedCategoryRepository : ICategoryRepository
         RemoveCacheEntry(CreateCacheKey());
     }
 
-    public async Task Delete(IEnumerable<int> ids, CancellationToken cancellationToken = default(CancellationToken))
-    {
-        await _repository.Delete(ids, cancellationToken);
-        RemoveCacheEntry(CreateCacheKey());
-    }
-
     public async Task<Category?> Get(int id, CancellationToken cancellationToken = default(CancellationToken))
     {
         ImmutableArray<Category> entities = await this.GetAll(cancellationToken);    // Read from cache

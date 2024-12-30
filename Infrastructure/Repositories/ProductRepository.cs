@@ -116,6 +116,23 @@ internal sealed class ProductRepository : IProductRepository
         return entities.ToImmutableArray();
     }
 
+    public async Task<ImmutableArray<int>> FindIdByCategory(int categoryId, CancellationToken cancellationToken = default(CancellationToken))
+    {
+        int[] entities;
+
+        using (var context = _contextFactory.CreateQueyContext())
+        {
+            // The query context, by default, does not enable tracking of the entities
+            entities = await context.Products
+                                    .Where(x => x.CategoryId == categoryId)
+                                    .Select(x => x.Id)
+                                    .ToArrayAsync(cancellationToken);
+        }
+
+        return entities.ToImmutableArray();
+    }
+
+
     public async Task ReplaceCategory(int oldCategoryId, int newCategoryId, CancellationToken cancellationToken = default)
     {
         using (var context = _contextFactory.CreateCommandContext())

@@ -1,14 +1,14 @@
 ﻿using System.Collections.Generic;
 using MediatR;
-using Tutorial.EntityFrameworkUpdate.Domain.Inventory.Categories.Requests;
+using Tutorial.EntityFrameworkUpdate.Domain.Inventory.ProductTags.Requests;
 
-namespace Tutorial.EntityFrameworkUpdate.Domain.Inventory.Categories.Handlers;
+namespace Tutorial.EntityFrameworkUpdate.Domain.Inventory.ProductTags.Handlers;
 
 internal class DeleteByIdsHandler : IRequestHandler<DeleteByIds>
 {
-    private readonly ICategoryRepository _repository;
+    private readonly IProductTagRepository _repository;
 
-    public DeleteByIdsHandler(ICategoryRepository repository)
+    public DeleteByIdsHandler(IProductTagRepository repository)
     {
         ArgumentNullException.ThrowIfNull(repository, nameof(repository));
 

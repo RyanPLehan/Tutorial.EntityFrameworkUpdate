@@ -102,7 +102,7 @@ public class ProductsController : ControllerBase
     //[Authorize(Roles = AuthorizationRoles.Read + ", " + AuthorizationRoles.Write + ", " + AuthorizationRoles.Admin)]
     public async Task<ActionResult<ItemList<Product>>> GetByCategory([FromQuery] int categoryid = 0)
     {
-        var request = new GetByCategory() { CategoryId = categoryid };
+        var request = new FindByCategory() { CategoryId = categoryid };
         var response = await _mediator.Send(request);
 
         if (response == null || response.IsEmpty)

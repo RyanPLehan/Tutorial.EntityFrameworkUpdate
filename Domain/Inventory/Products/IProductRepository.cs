@@ -15,7 +15,9 @@ public interface IProductRepository
 
     public Task<Product?> Get(int id, CancellationToken cancellationToken = default(CancellationToken));
     public Task<ImmutableArray<Product>> Get(IEnumerable<int> ids, CancellationToken cancellationToken = default(CancellationToken));
+
     public Task<ImmutableArray<Product>> FindByCategory(int categoryId, CancellationToken cancellationToken = default(CancellationToken));
+    public Task<ImmutableArray<int>> FindIdByCategory(int categoryId, CancellationToken cancellationToken = default(CancellationToken));
 
     public Task ReplaceCategory(int oldCategoryId, int newCategoryId, CancellationToken cancellationToken = default(CancellationToken));
 

@@ -5,20 +5,19 @@ using System.Collections.Immutable;
 
 namespace Tutorial.EntityFrameworkUpdate.Domain.Inventory.Products.Handlers;
 
-internal class DeleteHandler : IRequestHandler<Delete>
+internal class FindByCategoryHandler : IRequestHandler<FindByCategory, ImmutableArray<Product>>
 {
     private readonly IProductRepository _repository;
 
-    public DeleteHandler(IProductRepository repository)
+    public FindByCategoryHandler(IProductRepository repository)
     {
         ArgumentNullException.ThrowIfNull(repository, nameof(repository));
 
         _repository = repository;
     }
 
-    public async Task Handle(Delete request, CancellationToken cancellationToken)
+    public async Task<ImmutableArray<Product>> Handle(FindByCategory request, CancellationToken cancellationToken)
     {
-        if (request.Product != null)
-            await _repository.Delete(request.Product, cancellationToken);
+        return await _repository.FindByCategory(request.CategoryId, cancellationToken);
     }
 }

@@ -192,7 +192,7 @@ public class CategoriesController : ControllerBase
         if (id <= 0)
             return BadRequest();
 
-        var request = new ProductReq.GetByCategory() { CategoryId = id };
+        var request = new ProductReq.FindByCategory() { CategoryId = id };
         var response = await _mediator.Send(request);
 
         if (response == null || response.IsEmpty)
