@@ -19,7 +19,7 @@ internal sealed class ProductConfig : IEntityTypeConfiguration<Product>
                .ValueGeneratedOnAdd();
 
         builder.Property(x => x.Name)
-               .HasColumnName("ProductName")
+               .HasColumnName("Name")
                .HasColumnType("TEXT")
                .HasMaxLength(75)
                .IsRequired(true)

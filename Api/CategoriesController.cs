@@ -76,8 +76,14 @@ public class CategoriesController : ControllerBase
         if (id <= 0)
             return BadRequest();
 
-        var request = new DeleteById() { Id = id };
-        await _mediator.Send(request);
+        // Since Categories are cached, we can do a quick lookup to see if it exists
+        var getRequest = new GetById() { Id = id };
+        var getResponse = await _mediator.Send(getRequest);
+        if (getResponse == null)
+            return NotFound();
+
+        var delRequest = new DeleteById() { Id = id };
+        await _mediator.Send(delRequest);
         return Ok();
     }
 

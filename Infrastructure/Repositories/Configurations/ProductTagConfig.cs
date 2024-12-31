@@ -18,14 +18,14 @@ internal sealed class ProductTagConfig : IEntityTypeConfiguration<ProductTag>
                .ValueGeneratedOnAdd();
 
         builder.Property(x => x.Name)
-               .HasColumnName("TagName")
+               .HasColumnName("Name")
                .HasColumnType("TEXT")
                .HasMaxLength(25)
                .IsRequired(true)
                .IsUnicode(false);
 
         builder.Property(x => x.Value)
-               .HasColumnName("TagValue")
+               .HasColumnName("Value")
                .HasColumnType("TEXT")
                .HasMaxLength(50)
                .IsRequired(false)

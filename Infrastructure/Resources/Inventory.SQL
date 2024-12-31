@@ -1,14 +1,14 @@
 CREATE TABLE Category
 (      
     CategoryID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    CategoryName TEXT NOT NULL,
+    Name TEXT NOT NULL,
     Description TEXT NOT NULL
 );
 
 CREATE TABLE Product
 (
     ProductID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    ProductName TEXT NOT NULL,
+    Name TEXT NOT NULL,
     Description TEXT NOT NULL,
     Price NUMERIC  NOT NULL DEFAULT 0,
 	Quantity INTEGER  NOT NULL DEFAULT 0,
@@ -19,8 +19,8 @@ CREATE TABLE Product
 CREATE TABLE ProductTag
 (
     TagID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    TagName TEXT NOT NULL,
-	TagValue TEXT NULL,
+    Name TEXT NOT NULL,
+	Value TEXT NULL,
     ProductID INTEGER NOT NULL,
 	FOREIGN KEY (ProductID) REFERENCES Product (ProductID)
 );
@@ -43,7 +43,7 @@ CREATE UNIQUE INDEX IF NOT EXISTS UIDX_ProductTag_TagName
     ON ProductTag 
 (
     ProductID,
-    TagName
+    Name
 );
 
 -- Category

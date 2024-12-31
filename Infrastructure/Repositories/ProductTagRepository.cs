@@ -56,12 +56,13 @@ internal sealed class ProductTagRepository : IProductTagRepository
         }
     }
 
-    public async Task Delete(int id, CancellationToken cancellationToken = default(CancellationToken))
+    public async Task Delete(int productId, int id, CancellationToken cancellationToken = default(CancellationToken))
     {
         using (var context = _contextFactory.CreateCommandContext())
         {
             await context.ProductTags
-                         .Where(x => x.Id == id)
+                         .Where(x => x.ProductId == productId &&
+                                     x.Id == id)
                          .ExecuteDeleteAsync(cancellationToken);
         }
     }
@@ -95,6 +96,21 @@ internal sealed class ProductTagRepository : IProductTagRepository
                          .ExecuteDeleteAsync(cancellationToken);
         }
     }
+
+    public async Task<ProductTag?> Get(int productId, int id, CancellationToken cancellationToken = default(CancellationToken))
+    {
+        ProductTag? entity = null;
+        using (var context = _contextFactory.CreateCommandContext())
+        {
+            entity = await context.ProductTags
+                                  .Where(x => x.ProductId == productId &&
+                                              x.Id == id)
+                                  .FirstOrDefaultAsync(cancellationToken);
+        }
+
+        return entity;
+    }
+
 
     public async Task<ImmutableArray<ProductTag>> FindByName(string name, CancellationToken cancellationToken = default(CancellationToken))
     {

@@ -84,7 +84,6 @@ public class ProductsController : ControllerBase
     [Route("{id:int}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     //[Authorize(Roles = AuthorizationRoles.Admin)]
     public async Task<ActionResult> Delete([FromRoute] int id)
     {
@@ -194,64 +193,4 @@ public class ProductsController : ControllerBase
         else
             return Ok(response);
     }
-
-
-    #region Tags
-    [HttpGet]
-    [Route("{id:int}/Tags")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    //[Authorize(Roles = AuthorizationRoles.Read + ", " + AuthorizationRoles.Write + ", " + AuthorizationRoles.Admin)]
-    public async Task<ActionResult<ItemList<Product>>> GetTags([FromRoute] int id)
-    {
-        if (id <= 0)
-            return BadRequest();
-
-        return NoContent();
-
-        /*
-        var request = new ProductReq.GetByProduct() { ProductId = id };
-        var response = await _mediator.Send(request);
-
-        if (response == null || response.IsEmpty)
-            return NoContent();
-        else
-            return Ok(response);
-        */
-    }
-
-
-    [HttpPatch]
-    [Route("{id:int}/Tags")]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    //[Authorize(Roles = AuthorizationRoles.Admin)]
-    public async Task<ActionResult<Product>> PatchTags([FromRoute] int id, [FromBody] TagList tags)
-    {
-        // Demostrate how to use the HTTP Patch method to modify a collection of items (add/delete to/from a list)
-
-        if (id <= 0)
-            return BadRequest();
-        return Ok();
-        /*
-        var request = new Patch()
-        {
-            Id = id,
-            Description = entity.Description,
-            Price = entity.Price,
-            Quantity = entity.Quantity,
-        };
-
-        var response = await _mediator.Send(request);
-
-        if (response == null)
-            return NotFound();
-        else
-            return Ok(response);
-        */
-    }
-
-
-    #endregion
 }

@@ -8,5 +8,5 @@ public class Product
     public decimal Price { get; set; }
     public int Quantity { get; set; }
     public int CategoryId { get; init; }
-    public IEnumerable<Tag> Tags { get; set; } = Enumerable.Empty<Tag>();
+    public IEnumerable<ProductTag> Tags { get; set; } = Enumerable.Empty<ProductTag>();
 }

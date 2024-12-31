@@ -18,7 +18,7 @@ internal sealed class CategoryConfig : IEntityTypeConfiguration<Category>
                .ValueGeneratedOnAdd();
 
         builder.Property(x => x.Name)
-               .HasColumnName("CategoryName")
+               .HasColumnName("Name")
                .HasColumnType("TEXT")
                .HasMaxLength(75)
                .IsRequired(true)
