@@ -1,6 +1,4 @@
-﻿using Tutorial.EntityFrameworkUpdate.Domain.Inventory.Models;
-
-namespace Tutorial.EntityFrameworkUpdate.Api.Models;
+﻿namespace Tutorial.EntityFrameworkUpdate.Api.Models;
 
 /// <summary>
 /// It is bad practice to return just an array of items.

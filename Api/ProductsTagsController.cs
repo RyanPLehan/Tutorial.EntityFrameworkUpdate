@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using Tutorial.EntityFrameworkUpdate.Api.Models;
-using Tutorial.EntityFrameworkUpdate.Domain.Inventory.Models;
-using Tutorial.EntityFrameworkUpdate.Domain.Inventory.ProductTags.Requests;
+using Tutorial.EntityFrameworkUpdate.Application.ProductTags.Requests;
+using Tutorial.EntityFrameworkUpdate.Domain.Models;
 
 namespace Tutorial.EntityFrameworkUpdate.Api;
 

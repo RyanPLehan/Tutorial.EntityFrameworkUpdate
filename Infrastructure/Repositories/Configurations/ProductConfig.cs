@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Tutorial.EntityFrameworkUpdate.Domain.Inventory.Models;
+using Tutorial.EntityFrameworkUpdate.Domain.Models;
 
 namespace Tutorial.EntityFrameworkUpdate.Infrastructure.Repositories.Configurations;
 

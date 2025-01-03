@@ -1,7 +1,7 @@
-﻿using Tutorial.EntityFrameworkUpdate.Domain.Inventory.Models;
-using Tutorial.EntityFrameworkUpdate.Domain.Inventory.Products;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Immutable;
+using Tutorial.EntityFrameworkUpdate.Domain.Models;
+using Tutorial.EntityFrameworkUpdate.Domain.Repositories;
 
 namespace Tutorial.EntityFrameworkUpdate.Infrastructure.Repositories;
 

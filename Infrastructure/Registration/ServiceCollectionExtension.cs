@@ -1,15 +1,13 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Data.Sqlite;
-using Tutorial.EntityFrameworkUpdate.Domain.Inventory.Categories;
-using Tutorial.EntityFrameworkUpdate.Domain.Inventory.Products;
-using Tutorial.EntityFrameworkUpdate.Domain.Inventory.ProductTags;
 using Tutorial.EntityFrameworkUpdate.Infrastructure.Options;
 using Tutorial.EntityFrameworkUpdate.Infrastructure.Repositories;
 using Tutorial.EntityFrameworkUpdate.Infrastructure.Repositories.Decorators;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.AspNetCore.Http.HttpResults;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using Tutorial.EntityFrameworkUpdate.Domain.Repositories;
 
 namespace Tutorial.EntityFrameworkUpdate.Infrastructure.Registration;
 

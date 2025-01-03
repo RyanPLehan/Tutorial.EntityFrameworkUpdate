@@ -1,4 +1,4 @@
-﻿using Tutorial.EntityFrameworkUpdate.Domain.Inventory.Models;
+﻿using Tutorial.EntityFrameworkUpdate.Domain.Models;
 
 namespace Tutorial.EntityFrameworkUpdate.Api.Models;
 

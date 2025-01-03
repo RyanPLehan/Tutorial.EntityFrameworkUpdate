@@ -1,8 +1,8 @@
-﻿using Tutorial.EntityFrameworkUpdate.Domain.Inventory.Models;
-using Tutorial.EntityFrameworkUpdate.Domain.Inventory.Categories;
-using Microsoft.Extensions.Caching;
+﻿using Microsoft.Extensions.Caching;
 using Microsoft.Extensions.Caching.Memory;
 using System.Collections.Immutable;
+using Tutorial.EntityFrameworkUpdate.Domain.Models;
+using Tutorial.EntityFrameworkUpdate.Domain.Repositories;
 
 namespace Tutorial.EntityFrameworkUpdate.Infrastructure.Repositories.Decorators;
 
