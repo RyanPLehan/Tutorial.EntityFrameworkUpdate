@@ -2,18 +2,23 @@
 using System.Collections.Immutable;
 using Tutorial.EntityFrameworkUpdate.Domain.Models;
 using Tutorial.EntityFrameworkUpdate.Domain.Repositories;
+using Tutorial.EntityFrameworkUpdate.Infrastructure.Repositories.Models;
 
 namespace Tutorial.EntityFrameworkUpdate.Infrastructure.Repositories;
 
 internal sealed class ProductRepository : IProductRepository
 {
     private readonly IContextFactory<InventoryContext> _contextFactory;
+    private readonly IContextFactory<InventoryUpdateContext> _updateContextFactory;
 
-    public ProductRepository(IContextFactory<InventoryContext> roContextFactory)
+    public ProductRepository(IContextFactory<InventoryContext> contextFactory,
+                             IContextFactory<InventoryUpdateContext> updateContextFactory)
     {
-        ArgumentNullException.ThrowIfNull(roContextFactory, nameof(roContextFactory));
+        ArgumentNullException.ThrowIfNull(contextFactory, nameof(contextFactory));
+        ArgumentNullException.ThrowIfNull(updateContextFactory, nameof(updateContextFactory));
 
-        _contextFactory = roContextFactory;
+        _contextFactory = contextFactory;
+        _updateContextFactory = updateContextFactory;
     }
 
     public async Task<Product> Add(Product product, CancellationToken cancellationToken = default(CancellationToken))
@@ -236,4 +241,34 @@ internal sealed class ProductRepository : IProductRepository
         }
     }
 
+
+
+    /// <summary>
+    /// This will update an entity that is not tracked, but updates only specific fields.
+    /// </summary>
+    /// <param name="product"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public async Task<Product?> PerformantUpdate(int id, string description, decimal price, int quantity, CancellationToken cancellationToken = default)
+    {
+        // This will create a Partial UPDATE statement for Descrition, Price, Quantity
+        // 1.  The entity is NOT Tracked
+        // 2.  Requires a separate context b/c EF has a strict one to one relationship between the DB table and the Class
+
+        var entity = new PerformantProductUpdate()
+        {
+            Id = id,
+            Description = description,
+            Price = price,
+            Quantity = quantity,
+        };
+
+        using (var context = _updateContextFactory.CreateCommandContext())
+        {
+            context.Update(entity);
+            await context.SaveChangesAsync(cancellationToken);
+        }
+
+        return await this.Get(id, cancellationToken);
+    }
 }

@@ -193,4 +193,32 @@ public class ProductsController : ControllerBase
         else
             return Ok(response);
     }
+
+
+    [HttpPut]
+    [Route("{id:int}/Performant")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    //[Authorize(Roles = AuthorizationRoles.Write + ", " + AuthorizationRoles.Admin)]
+    public async Task<ActionResult<Product>> PerformantUpdate([FromRoute] int id, [FromBody] Item.Update entity)
+    {
+        if (id <= 0)
+            return BadRequest();
+
+        var request = new PerformantUpdate()
+        {
+            Id = id,
+            Description = entity.Description,
+            Price = entity.Price,
+            Quantity = entity.Quantity,
+        };
+
+        var response = await _mediator.Send(request);
+
+        if (response == null)
+            return NotFound();
+        else
+            return Ok(response);
+    }
 }

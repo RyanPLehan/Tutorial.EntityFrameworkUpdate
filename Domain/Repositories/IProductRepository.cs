@@ -25,4 +25,12 @@ public interface IProductRepository
     public Task UpdateDescription(int id, string description, CancellationToken cancellationToken = default);
     public Task UpdatePrice(int id, decimal price, CancellationToken cancellationToken = default);
     public Task UpdateQuantity(int id, int quantity, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// This will update an entity that is not tracked, but updates only specific fields.
+    /// </summary>
+    /// <param name="product"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    public Task<Product?> PerformantUpdate(int id, string description, decimal price, int quantity, CancellationToken cancellationToken = default);
 }

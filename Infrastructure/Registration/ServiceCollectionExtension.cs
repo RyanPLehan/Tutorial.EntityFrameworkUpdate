@@ -30,6 +30,7 @@ public static class ServiceCollectionExtension
 
         // Database Context Factories
         services.AddSingleton<IContextFactory<InventoryContext>, InventoryContextFactory>();
+        services.AddSingleton<IContextFactory<InventoryUpdateContext>, InventoryUpdateContextFactory>();
 
         // Non-Decorated
         //services.AddSingleton<ICategoryRepository, CategoryRepository>();
