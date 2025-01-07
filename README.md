@@ -55,8 +55,8 @@ EF has the ability to determine which fields were modified to assist in generati
                                      .FirstOrDefaultAsync();
     
     // Update tracked entity fields
-    trackedEntity.Price = product.Price;
-    trackedEntity.Quantity = product.Quantity;
+    trackedEntity.Price = price;
+    trackedEntity.Quantity = quantity;
 
     // Use the tracked entity to have EF detect changes
     context.Update(trackedEntity);
@@ -88,9 +88,10 @@ Starting with EF Core 7, two new methods were introduced:
 3.  Developer will need to construct the WHERE clause.
     ```    
     DateTime archiveDate = DateTime.Today.AddDays(-30);
+    
     // This will update zero or more entities ArchiveFlag
     await context.Products
-                 .Where(x => x.DateEntered <= ArchiveDate)
+                 .Where(x => x.DateEntered <= archiveDate)
                  .ExecuteUpdateAsync(x => 
                         x.SetProperty(p => p.ArchiveFlag, true));
     ```
