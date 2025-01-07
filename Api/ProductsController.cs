@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using Tutorial.EntityFrameworkUpdate.Api.Models;
 using Tutorial.EntityFrameworkUpdate.Application.Products.Requests;
-using Tutorial.EntityFrameworkUpdate.Domain.Models;
+using Tutorial.EntityFrameworkUpdate.Application.Models;
 //using ProductTagReq = Tutorial.EntityFrameworkUpdate.Application.ProductTags.Requests;
 
 namespace Tutorial.EntityFrameworkUpdate.Api;

@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Tutorial.EntityFrameworkUpdate.Application.Products.Requests;
-using Tutorial.EntityFrameworkUpdate.Domain.Models;
-using Tutorial.EntityFrameworkUpdate.Domain.Repositories;
+using Tutorial.EntityFrameworkUpdate.Application.Models;
 
 namespace Tutorial.EntityFrameworkUpdate.Application.Products.Handlers;
 

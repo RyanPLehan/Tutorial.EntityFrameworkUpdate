@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using Tutorial.EntityFrameworkUpdate.Domain.Models;
+using Tutorial.EntityFrameworkUpdate.Application.Models;
 
 namespace Tutorial.EntityFrameworkUpdate.Application.Products.Requests;
 

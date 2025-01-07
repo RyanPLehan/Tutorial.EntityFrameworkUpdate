@@ -7,7 +7,9 @@ using Tutorial.EntityFrameworkUpdate.Infrastructure.Repositories.Decorators;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.AspNetCore.Http.HttpResults;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
-using Tutorial.EntityFrameworkUpdate.Domain.Repositories;
+using Tutorial.EntityFrameworkUpdate.Application.Categories;
+using Tutorial.EntityFrameworkUpdate.Application.Products;
+using Tutorial.EntityFrameworkUpdate.Application.ProductTags;
 
 namespace Tutorial.EntityFrameworkUpdate.Infrastructure.Registration;
 

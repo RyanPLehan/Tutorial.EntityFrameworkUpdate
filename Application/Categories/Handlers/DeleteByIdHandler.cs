@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Tutorial.EntityFrameworkUpdate.Application.Categories.Requests;
-using Tutorial.EntityFrameworkUpdate.Domain.Repositories;
+using Tutorial.EntityFrameworkUpdate.Application.Products;
 using ProductReq = Tutorial.EntityFrameworkUpdate.Application.Products.Requests;
 
 namespace Tutorial.EntityFrameworkUpdate.Application.Categories.Handlers;

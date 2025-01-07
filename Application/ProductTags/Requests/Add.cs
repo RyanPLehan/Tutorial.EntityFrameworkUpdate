@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using Tutorial.EntityFrameworkUpdate.Domain.Models;
+using Tutorial.EntityFrameworkUpdate.Application.Models;
 
 namespace Tutorial.EntityFrameworkUpdate.Application.ProductTags.Requests;
 

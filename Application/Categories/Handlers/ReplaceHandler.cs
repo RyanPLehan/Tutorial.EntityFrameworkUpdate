@@ -1,8 +1,8 @@
 ﻿using MediatR;
-using Tutorial.EntityFrameworkUpdate.Domain.Models;
+using Tutorial.EntityFrameworkUpdate.Application.Models;
 using System.Collections.Immutable;
-using Tutorial.EntityFrameworkUpdate.Domain.Repositories;
 using Tutorial.EntityFrameworkUpdate.Application.Categories.Requests;
+using Tutorial.EntityFrameworkUpdate.Application.Products;
 
 namespace Tutorial.EntityFrameworkUpdate.Application.Categories.Handlers;
 

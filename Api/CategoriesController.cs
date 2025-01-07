@@ -5,7 +5,7 @@ using MediatR;
 using Tutorial.EntityFrameworkUpdate.Api.Models;
 using Tutorial.EntityFrameworkUpdate.Application.Categories.Requests;
 using ProductReq = Tutorial.EntityFrameworkUpdate.Application.Products.Requests;
-using Tutorial.EntityFrameworkUpdate.Domain.Models;
+using Tutorial.EntityFrameworkUpdate.Application.Models;
 
 namespace Tutorial.EntityFrameworkUpdate.Api;
 

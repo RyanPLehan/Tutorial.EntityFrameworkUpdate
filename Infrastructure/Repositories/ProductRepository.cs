@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Immutable;
-using Tutorial.EntityFrameworkUpdate.Domain.Models;
-using Tutorial.EntityFrameworkUpdate.Domain.Repositories;
+using Tutorial.EntityFrameworkUpdate.Application.Products;
+using Tutorial.EntityFrameworkUpdate.Application.Models;
 using Tutorial.EntityFrameworkUpdate.Infrastructure.Repositories.Models;
 
 namespace Tutorial.EntityFrameworkUpdate.Infrastructure.Repositories;

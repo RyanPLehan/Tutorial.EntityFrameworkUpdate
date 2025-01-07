@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using MediatR;
 using Tutorial.EntityFrameworkUpdate.Application.ProductTags.Requests;
-using Tutorial.EntityFrameworkUpdate.Domain.Repositories;
 
 namespace Tutorial.EntityFrameworkUpdate.Application.ProductTags.Handlers;
 

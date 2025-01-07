@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Data;
-using Tutorial.EntityFrameworkUpdate.Domain.Models;
+using Tutorial.EntityFrameworkUpdate.Application.Models;
 using Tutorial.EntityFrameworkUpdate.Infrastructure.Repositories.Configurations;
 
 namespace Tutorial.EntityFrameworkUpdate.Infrastructure.Repositories;
