@@ -5,8 +5,8 @@ The trick is understanding how to do one or the other.
 
 There are additional items that are included that one might be interested in.  
 1.  Example of the [Clean Architecture](https://levelup.gitconnected.com/clean-architecture-86c4f03e4771).
-2.  Example of the Decorator pattern, including setup via Dependency Injection.  
-3.  Two examples of using HTTP Patch method.  
+2.  Example of the [Decorator Pattern](https://refactoring.guru/design-patterns/decorator/csharp/example), including setup via Dependency Injection.  
+3.  Two examples of using [HTTP Patch](https://en.wikipedia.org/wiki/PATCH_(HTTP)) method.  
     -  Updating individual object fields.
     -  Updating a list of objects, where the objects are either added or deleted
 
@@ -88,7 +88,7 @@ Starting with EF Core 7, two new methods were introduced:
 3.  Developer will need to construct the WHERE clause.
     ```    
     DateTime archiveDate = DateTime.Today.AddDays(-30);
-    
+
     // This will update zero or more entities ArchiveFlag
     await context.Products
                  .Where(x => x.DateEntered <= archiveDate)
@@ -105,7 +105,7 @@ Starting with EF Core 7, two new methods were introduced:
 
 
 ### 3 - Using a separate DB Context for Updates
-This is a specialized scenario where one can use the following benefits
+This is a specialized scenario where one can have the following benefits
 -  Entity does not need to be tracked.
 -  Clearly define which fields can be updated.
 -  Allow EF to fully generate the SQL Statement.
