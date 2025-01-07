@@ -1,7 +1,7 @@
 # Tutorial.EntityFrameworkUpdate 
 A sample tutorial to show the how EF generates SQL UPDATE statements.
 EF can generate either a *Full* or *Partial* SQL UPDATE statement.
-The trick is understanding how to do one or the other
+The trick is understanding how to do one or the other.
 
 There are additional items that are included that one might be interested in.  
 1.  Example of the [Clean Architecture](https://levelup.gitconnected.com/clean-architecture-86c4f03e4771).
@@ -77,7 +77,9 @@ Starting with EF Core 7, two new methods were introduced:
 -  ExecuteUpdate - Allows one ore more entities to be updated without using the context Update() method and allows developer to explicity set the Where clause.
 -  ExecuteDelete - Allows one ore more entities to be deleted without using the context Delete() method and allows developer to explicity set the Where clause.
 #### Reason(s)
-1.  With a single Update statement, multiple database entities can be updated.
+1.  Gives developer more control.
+    -  Controls the Where clause.
+    -  Not restricted to Primary Key of object.
 2.  Database entities do not need be tracked or read in from the database prior.
 
 #### Nuance(s)
