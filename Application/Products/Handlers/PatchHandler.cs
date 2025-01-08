@@ -23,6 +23,10 @@ internal class PatchHandler : IRequestHandler<Patch, Product>
         // 3.  Each field has its own update routine
         // 4.  Instead of checking to see if the entity exists first, just issue the updates and then retrieve the entity at the end
 
+        // It is important to note that for this example, there are up to 3 potential database calls to update the entity.
+        // The entire operation should be ATOMIC, therefore, should be wrapped within a transaction.
+        //   - I would normally use Transaction Scope here, but SQLite does not support Implicit Transaction Scopes.
+
         // It should be noted, that I personally do not like using the HTTP Patch method to update specific fields.
         // I believe that it should be used for the purpose of modifying collection items (ie add/delete items to/from a list)
 

@@ -9,6 +9,7 @@ There are additional items that are included that one might be interested in.
 3.  Two examples of using [HTTP Patch](https://en.wikipedia.org/wiki/PATCH_(HTTP)) method.  
     -  Updating individual object fields.
     -  Updating a list of objects, where the objects are either added or deleted
+4.  This uses [SQLite](https://learn.microsoft.com/en-us/dotnet/standard/data/sqlite/?tabs=net-cli) as an in-memory database;
 
 
 ## The *Full* UPDATE statement
@@ -67,7 +68,7 @@ EF has the ability to determine which fields were modified to assist in generati
     -  EF requires the entity to be tracked.
 2.  Entity must be tracked (-).
     -  A tracked entity is stored in memory using an in-memory cache.
-    -  Depending the number of entities or an entity's payload size,  might consume a large amount of in-memory cache.
+    -  Depending the number of entities or an entity's payload size,  might consume a large amount of memory.
 3.  May have unneccessary processing when mapping (-).
     -  If the source entity contains many fields, but only 3 are modified.
 
