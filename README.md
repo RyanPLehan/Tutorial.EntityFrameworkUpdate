@@ -58,8 +58,8 @@ This is where EF generates a SQL statement with **all** fields being updated, wh
 This is where EF generates a SQL statement where only the fields who's values have been modified.  
 There are 3 ways to ensure that EF generates a *Partial* UPDATE statement
 
-### 1 - Using EF Database Provider's built-in change detection
-Some, not all, EF database providers have the ability to determine which fields were modified to assist in generating the SQL statement.
+### 1 - Using EF 's built-in change detection
+EF have the ability to determine which fields were modified to assist in generating the SQL statement.
 #### Reason(s)
 1.  Entity is being [tracked](https://learn.microsoft.com/en-us/ef/core/querying/tracking).
     -  The entity was previously read in from the same database context as will be written back to.

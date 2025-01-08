@@ -172,7 +172,10 @@ internal sealed class ProductRepository : IProductRepository
                 entity.Price = price;
                 entity.Quantity = quantity;
 
-                context.Products.Update(entity);
+                // Since the entity is being tracked, there is no need to issue the .Update method.
+                // The .Update method will mark the entire object as being modified and therefore will generate a Full UPDATE statement
+                //context.Products.Update(entity);
+
                 await context.SaveChangesAsync(cancellationToken);
             }
         }
