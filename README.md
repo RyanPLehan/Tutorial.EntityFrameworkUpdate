@@ -64,6 +64,7 @@ EF have the ability to determine which fields were modified to assist in generat
 1.  Entity is being [tracked](https://learn.microsoft.com/en-us/ef/core/querying/tracking).
     -  The entity was previously read in from the same database context as will be written back to.
 2.  The tracked entity must have one or more fields modified.
+3.  Do not use the .Update method, instead just call the .SaveChanges method.
 
 #### Nuance(s)
 1.  The entire entity must be read from the same database context that will be written back to.
