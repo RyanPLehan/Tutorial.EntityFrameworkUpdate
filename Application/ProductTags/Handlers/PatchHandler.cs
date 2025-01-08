@@ -23,6 +23,9 @@ internal class PatchHandler : IRequestHandler<Patch, ImmutableArray<ProductTag>>
         // 2.  New tags are added to the list
         // 3.  Existing tags that are to be deleted are not in (non existent) the list
 
+        // Note: This entire operation should be ATOMIC
+        //  - SQLite does not support Implicit Transaction Scope
+
         await DeleteTags(request, cancellationToken);
         await AddTags(request, cancellationToken);
         return await _repository.FindByProduct(request.ProductId);

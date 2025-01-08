@@ -25,7 +25,13 @@ public class CategoriesController : ControllerBase
             public string Description { get; init; } = null;
         }
 
-        public class Update
+        public class UpdateFull
+        {
+            public string Name { get; init; } = null;
+            public string Description { get; init; } = null;
+        }
+
+        public class UpdatePartial
         {
             public string Description { get; init; } = null;
         }
@@ -162,14 +168,13 @@ public class CategoriesController : ControllerBase
         return actionResult;
     }
 
-
     [HttpPut]
-    [Route("{id:int}")]
+    [Route("{id:int}/Full")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     //[Authorize(Roles = AuthorizationRoles.Write + ", " + AuthorizationRoles.Admin)]
-    public async Task<ActionResult<Category>> Update([FromRoute] int id, [FromBody] Item.Update entity)
+    public async Task<ActionResult<Category>> Update([FromRoute] int id, [FromBody] Item.UpdateFull entity)
     {
         if (id <= 0)
             return BadRequest();
@@ -181,7 +186,31 @@ public class CategoriesController : ControllerBase
             return NotFound();
         else
         {
-            var updRequest = new Update() { Id = id, Description = entity.Description };
+            var updRequest = new UpdateFullContract() { Id = id, Name = entity.Name, Description = entity.Description };
+            var updResponse = await _mediator.Send(updRequest);
+            return Ok(updResponse);
+        }
+    }
+
+    [HttpPut]
+    [Route("{id:int}/Partial")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    //[Authorize(Roles = AuthorizationRoles.Write + ", " + AuthorizationRoles.Admin)]
+    public async Task<ActionResult<Category>> Update([FromRoute] int id, [FromBody] Item.UpdatePartial entity)
+    {
+        if (id <= 0)
+            return BadRequest();
+
+        var getRequest = new GetById() { Id = id };
+        var getResponse = await _mediator.Send(getRequest);
+
+        if (getResponse == null)
+            return NotFound();
+        else
+        {
+            var updRequest = new UpdatePartialContract() { Id = id, Description = entity.Description };
             var updResponse = await _mediator.Send(updRequest);
             return Ok(updResponse);
         }
