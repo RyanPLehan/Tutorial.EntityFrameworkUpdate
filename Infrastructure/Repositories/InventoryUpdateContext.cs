@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Data;
-using Tutorial.EntityFrameworkUpdate.Infrastructure.Repositories.Models;
 using Tutorial.EntityFrameworkUpdate.Infrastructure.Repositories.Configurations;
+using Tutorial.EntityFrameworkUpdate.Application.Models;
 
 namespace Tutorial.EntityFrameworkUpdate.Infrastructure.Repositories;
 

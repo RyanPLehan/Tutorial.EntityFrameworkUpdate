@@ -7,11 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Infrastructure\Resources\Inventory.sql" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Infrastructure\Resources\Inventory.sql" />
+    <EmbeddedResource Include="Infrastructure\Resources\SqlServer_Inventory.sql" />
+    <EmbeddedResource Include="Infrastructure\Resources\Sqlite_Inventory.sql" />
   </ItemGroup>
 
   <ItemGroup>

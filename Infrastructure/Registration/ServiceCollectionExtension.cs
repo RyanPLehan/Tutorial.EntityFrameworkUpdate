@@ -74,7 +74,7 @@ public static class ServiceCollectionExtension
 
     private static void CreateDatabase(SqliteConnection conn)
     {
-        const string RESOURCE_NAME = "Inventory.sql";
+        const string RESOURCE_NAME = "Sqlite_Inventory.sql";
         string resourceFQN = GetResourceFQN(RESOURCE_NAME);
         SqliteCommand command = new SqliteCommand();
 

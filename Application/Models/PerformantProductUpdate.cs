@@ -1,4 +1,4 @@
-﻿namespace Tutorial.EntityFrameworkUpdate.Infrastructure.Repositories.Models;
+﻿namespace Tutorial.EntityFrameworkUpdate.Application.Models;
 
 public class PerformantProductUpdate
 {

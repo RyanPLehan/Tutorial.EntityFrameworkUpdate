@@ -13,27 +13,27 @@ internal sealed class ProductTagConfig : IEntityTypeConfiguration<ProductTag>
 
         builder.Property(x => x.Id)
                .HasColumnName("TagID")
-               .HasColumnType("INTEGER")
+               .HasColumnType("INT")
                .IsRequired(true)
                .ValueGeneratedOnAdd();
 
         builder.Property(x => x.Name)
                .HasColumnName("Name")
-               .HasColumnType("TEXT")
+               .HasColumnType("varchar")
                .HasMaxLength(25)
                .IsRequired(true)
                .IsUnicode(false);
 
         builder.Property(x => x.Value)
                .HasColumnName("Value")
-               .HasColumnType("TEXT")
+               .HasColumnType("varchar")
                .HasMaxLength(50)
                .IsRequired(false)
                .IsUnicode(false);
 
         builder.Property(x => x.ProductId)
                .HasColumnName("ProductID")
-               .HasColumnType("INTEGER")
+               .HasColumnType("INT")
                .IsRequired(true)
                .ValueGeneratedNever();
     }

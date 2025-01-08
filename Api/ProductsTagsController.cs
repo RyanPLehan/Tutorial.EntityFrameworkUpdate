@@ -80,7 +80,7 @@ public class ProductTagsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     //[Authorize(Roles = AuthorizationRoles.Read + ", " + AuthorizationRoles.Write + ", " + AuthorizationRoles.Admin)]
-    public async Task<ActionResult<ItemList<Domain.Models.Tag>>> GetAll([FromRoute] int productId)
+    public async Task<ActionResult<ItemList<ProductTag>>> GetAll([FromRoute] int productId)
     {
         if (productId <= 0)
             return BadRequest();
@@ -91,7 +91,7 @@ public class ProductTagsController : ControllerBase
         if (response == null || response.IsEmpty)
             return NoContent();
         else
-            return Ok(new ItemList<Domain.Models.Tag>() { Items = response });
+            return Ok(new ItemList<ProductTag>() { Items = response });
     }
 
 
@@ -123,7 +123,7 @@ public class ProductTagsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     //[Authorize(Roles = AuthorizationRoles.Write + ", " + AuthorizationRoles.Admin)]
-    public async Task<ActionResult<ItemList<Domain.Models.Tag>>> PatchTags([FromRoute] int productId, [FromBody] ItemList<ProductTag> tags)
+    public async Task<ActionResult<ItemList<ProductTag>>> PatchTags([FromRoute] int productId, [FromBody] ItemList<ProductTag> tags)
     {
         // Demostrate how to use the HTTP Patch method to modify a collection of items (add/delete to/from a list)
 
@@ -141,7 +141,7 @@ public class ProductTagsController : ControllerBase
         if (response == null || response.IsEmpty)
             return NotFound();
         else
-            return CreatedAtAction(nameof(GetAll), new { productId }, new ItemList<Domain.Models.Tag>() { Items = response });
+            return CreatedAtAction(nameof(GetAll), new { productId }, new ItemList<ProductTag>() { Items = response });
     }
 
 }

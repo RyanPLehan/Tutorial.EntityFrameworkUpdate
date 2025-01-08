@@ -48,7 +48,7 @@ internal class UpdatePartialContractHandler : IRequestHandler<UpdatePartialContr
             Id = target.Id,
 
             // Commenting out the following line will cause an error b/c EF will put in a null value
-            Name = target.Name,
+            //Name = target.Name,
 
             // This is the field wa want to update
             Description = source.Description,

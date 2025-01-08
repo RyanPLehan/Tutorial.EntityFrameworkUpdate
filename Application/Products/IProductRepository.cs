@@ -32,5 +32,5 @@ public interface IProductRepository
     /// <param name="product"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public Task<Product?> PerformantUpdate(int id, string description, decimal price, int quantity, CancellationToken cancellationToken = default);
+    public Task<Product?> PerformantUpdate(PerformantProductUpdate performantProductUpdate, CancellationToken cancellationToken = default);
 }

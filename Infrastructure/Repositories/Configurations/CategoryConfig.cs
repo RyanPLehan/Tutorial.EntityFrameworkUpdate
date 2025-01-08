@@ -13,20 +13,20 @@ internal sealed class CategoryConfig : IEntityTypeConfiguration<Category>
 
         builder.Property(x => x.Id)
                .HasColumnName("CategoryID")
-               .HasColumnType("INTEGER")
+               .HasColumnType("int")
                .IsRequired(true)
                .ValueGeneratedOnAdd();
 
         builder.Property(x => x.Name)
                .HasColumnName("Name")
-               .HasColumnType("TEXT")
+               .HasColumnType("varchar")
                .HasMaxLength(75)
                .IsRequired(true)
                .IsUnicode(false);
 
         builder.Property(x => x.Description)
                .HasColumnName("Description")
-               .HasColumnType("TEXT")
+               .HasColumnType("varchar")
                .HasMaxLength(255)
                .IsRequired(true)
                .IsUnicode(false);

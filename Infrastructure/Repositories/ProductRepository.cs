@@ -2,7 +2,6 @@
 using System.Collections.Immutable;
 using Tutorial.EntityFrameworkUpdate.Application.Products;
 using Tutorial.EntityFrameworkUpdate.Application.Models;
-using Tutorial.EntityFrameworkUpdate.Infrastructure.Repositories.Models;
 
 namespace Tutorial.EntityFrameworkUpdate.Infrastructure.Repositories;
 
@@ -249,26 +248,18 @@ internal sealed class ProductRepository : IProductRepository
     /// <param name="product"></param>
     /// <param name="cancellationToken"></param>
     /// <returns></returns>
-    public async Task<Product?> PerformantUpdate(int id, string description, decimal price, int quantity, CancellationToken cancellationToken = default)
+    public async Task<Product?> PerformantUpdate(PerformantProductUpdate performantProductUpdate, CancellationToken cancellationToken = default)
     {
         // This will create a Partial UPDATE statement for Descrition, Price, Quantity
         // 1.  The entity is NOT Tracked
         // 2.  Requires a separate context b/c EF has a strict one to one relationship between the DB table and the Class
 
-        var entity = new PerformantProductUpdate()
-        {
-            Id = id,
-            Description = description,
-            Price = price,
-            Quantity = quantity,
-        };
-
         using (var context = _updateContextFactory.CreateCommandContext())
         {
-            context.Update(entity);
+            context.Update(performantProductUpdate);
             await context.SaveChangesAsync(cancellationToken);
         }
 
-        return await this.Get(id, cancellationToken);
+        return await this.Get(performantProductUpdate.Id, cancellationToken);
     }
 }

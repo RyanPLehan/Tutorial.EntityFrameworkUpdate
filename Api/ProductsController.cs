@@ -139,7 +139,7 @@ public class ProductsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     //[Authorize(Roles = AuthorizationRoles.Admin)]
-    public async Task<ActionResult<Product>> Replace([FromRoute] int id, [FromBody] Item.Patch entity)
+    public async Task<ActionResult<Product>> Patch([FromRoute] int id, [FromBody] Item.Patch entity)
     {
         // Demostrate how to use the HTTP Patch method to update any number of fields
         // This example allows the updating of 1 to 3 fields.
