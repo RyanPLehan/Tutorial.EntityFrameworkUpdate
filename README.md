@@ -11,6 +11,26 @@ There are additional items that are included that one might be interested in.
     -  Updating a list of objects, where the objects are either added or deleted
 4.  This uses [SQLite](https://learn.microsoft.com/en-us/dotnet/standard/data/sqlite/?tabs=net-cli) as an in-memory database;
 
+### Sample application setup
+1.  A simple inventory application that consists of the following: 
+    -  Categories
+        -  Each Category has zero or more Products.
+    -  Products
+        -  Member of a single Category.
+        -  Can have zero or more Tags (Product Tags).
+    -  Product Tags
+        -  Member of a single Product.
+        -  Cannot have more than one tag with the same name to the same Product.
+2.  No UI, just a backend CRUD based [REST API](https://restfulapi.net/) application.
+3.  Uses SQLite as an in-memory database.
+    -  Database is recreated everytime the application starts up.
+4.  Uses the following patterns:
+    -  [Mediator](https://refactoring.guru/design-patterns/mediator)
+    -  Command Query Responsibilty Segregation ([CQRS](https://learn.microsoft.com/en-us/azure/architecture/patterns/cqrs))
+    -  [Decorator](https://refactoring.guru/design-patterns/decorator/csharp/example)
+    -  [Repository](https://learn.microsoft.com/en-us/dotnet/architecture/microservices/microservice-ddd-cqrs-patterns/infrastructure-persistence-layer-design)
+    -  [Inversion of Control](https://en.wikipedia.org/wiki/Inversion_of_control) using [Dependency Injection](https://en.wikipedia.org/wiki/Dependency_injection)
+
 
 ## The *Full* UPDATE statement
 This is where EF generates a SQL statement with **all** fields being updated, whether or not the field's value has been modified.
