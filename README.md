@@ -35,7 +35,7 @@ There are additional items that are included that one might be interested in.
 ## The *Full* UPDATE statement
 This is where EF generates a SQL statement with **all** fields being updated, whether or not the field's value has been modified.
 #### Reason(s)
-1.  Entity not being [tracked](https://learn.microsoft.com/en-us/ef/core/querying/tracking).
+1.  Entity is not being [tracked](https://learn.microsoft.com/en-us/ef/core/querying/tracking).
     -  The entity was not previously queried from the database.
     -  The entity was queried from a database that is not the same as the one being updated.  This occurs where the entity is read from a replicated database.
     -  The entity was queried from a database with the AsNoTracking attribute/method.
